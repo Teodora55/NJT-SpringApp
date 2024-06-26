@@ -14,19 +14,20 @@ import rs.ac.bg.fon.service.AuthorService;
 @RestController
 @RequestMapping("/author")
 public class AuthorController {
-        @Autowired
+
+    @Autowired
     private AuthorService authorService;
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable("id") Long id){
+    public ResponseEntity<Author> getAuthorById(@PathVariable("id") Long id) {
         Author author = authorService.getAuthor(id);
-        return author != null ? new ResponseEntity<Author>(author, HttpStatus.OK) : 
-                new ResponseEntity<Author>(HttpStatus.NOT_FOUND);
+        return author != null ? new ResponseEntity<Author>(author, HttpStatus.OK)
+                : new ResponseEntity<Author>(HttpStatus.NOT_FOUND);
     }
-    
+
     @GetMapping("/all")
-    public ResponseEntity<List<Author>> getAuthors(){
+    public ResponseEntity<List<Author>> getAuthors() {
         List<Author> authors = authorService.getAllAuthors();
-        return authors.isEmpty() ?  new ResponseEntity<List<Author>>(HttpStatus.NOT_FOUND) : new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
+        return authors.isEmpty() ? new ResponseEntity<List<Author>>(HttpStatus.NOT_FOUND) : new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
     }
 }

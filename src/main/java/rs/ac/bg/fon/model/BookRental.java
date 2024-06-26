@@ -12,11 +12,16 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import rs.ac.bg.fon.util.DateHelper;
 
 @Entity
 @Table(name = "rentals")
+@Getter
+@Setter
+@ToString
 public class BookRental {
     	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,76 +63,5 @@ public class BookRental {
 		this.returnBy = DateHelper.getTodayDate().plusWeeks(1);
 		this.customer = customer;
 		this.bookCopy = bookCopy;
-	}
-
-    public BookCopy getBookCopy() {
-        return bookCopy;
-    }
-
-    public void setBookCopy(BookCopy bookCopy) {
-        this.bookCopy = bookCopy;
-    }
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public LocalDate getBorrowedAt() {
-		return borrowedAt;
-	}
-
-	public LocalDate getReturnBy() {
-		return returnBy;
-	}
-
-	public void setReturnBy(LocalDate returnBy) {
-		this.returnBy = returnBy;
-	}
-
-	public LocalDate getReturnedAt() {
-		return returnedAt;
-	}
-
-	public void setReturnedAt(LocalDate returnedAt) {
-		this.returnedAt = returnedAt;
-	}
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	public Customer getApprovedByAdmin() {
-		return approvedByAdmin;
-	}
-
-	public void setApprovedByAdmin(Customer approvedByAdmin) {
-		this.approvedByAdmin = approvedByAdmin;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BookRental other = (BookRental) obj;
-		return Objects.equals(id, other.id);
-	}
-
-	@Override
-	public String toString() {
-		return "BookRental [id=" + id + ", borrowedAt=" + borrowedAt + ", returnBy=" + returnBy + ", returnedAt="
-				+ returnedAt + ", customer=" + customer + ", book=" + bookCopy + ", approvedByAdmin=" + approvedByAdmin
-				+ "]";
 	}
 }

@@ -44,8 +44,6 @@ public class BookRentalController {
     @PostMapping(value = "/customers/{customerId}/books/{bookId}/borrow")
     public ResponseEntity<BookRental> borrowBook(@PathVariable("customerId") Long customerId,
             @PathVariable("bookId") Long bookId) {
-        customerId = customerService.getAllCustomers().get(0).getId();
-
         Customer customer = customerService.getCustomer(customerId);
         Book book = bookService.getBook(bookId);
         if (customer != null && book != null && bookRentalService.findExistingRentalByBookId(customerId,bookId) == null) {
