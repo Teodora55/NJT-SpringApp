@@ -11,5 +11,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT bc FROM Book b JOIN b.bookCopies bc WHERE b.id = :bookId")
     List<BookCopy> getAllBookCopies(@Param("bookId") Long bookId);
+    
+    Book findByName(String name);
 
 }

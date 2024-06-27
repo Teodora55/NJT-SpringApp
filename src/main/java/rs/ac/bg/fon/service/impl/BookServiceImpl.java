@@ -10,11 +10,11 @@ import rs.ac.bg.fon.repository.BookRepository;
 import rs.ac.bg.fon.service.BookService;
 
 @Service
-public class BookServiceImpl implements BookService{
+public class BookServiceImpl implements BookService {
 
     @Autowired
     private BookRepository bookRepository;
-    
+
     public Book saveBook(Book book) {
         return bookRepository.save(book);
     }
@@ -22,9 +22,8 @@ public class BookServiceImpl implements BookService{
     @Transactional
     public Book updateBook(Long id, Book book) {
         Book existing = bookRepository.findById(id).orElse(null);
-        if(existing != null){
+        if (existing != null) {
             book.setName(existing.getName());
-            book.setPrice(existing.getPrice());
             book.setAuthor(existing.getAuthor());
             bookRepository.save(book);
             return book;
@@ -53,5 +52,5 @@ public class BookServiceImpl implements BookService{
     public List<BookCopy> getAllBookCopies(Long bookId) {
         return bookRepository.getAllBookCopies(bookId);
     }
-    
+
 }

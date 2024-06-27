@@ -13,13 +13,17 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "book")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
+@Builder
 public class Book {
 
     @Id
@@ -28,12 +32,17 @@ public class Book {
 
     @Column
     String name;
-
+    
     @Column
-    int price;
+    String coverUrl;
 
-    @Column
-    Genre genre;
+    @ManyToMany
+    @JoinTable(
+            name = "bookshelf_book",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "bookshelf_id"))
+    @JsonManagedReference
+    Set<Bookshelf> bookshelves;
 
     @ManyToMany
     @JoinTable(

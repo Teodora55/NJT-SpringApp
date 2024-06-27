@@ -5,7 +5,7 @@ import rs.ac.bg.fon.model.Book;
 import rs.ac.bg.fon.model.BookCopy;
 
 public interface BookService {
-    
+ 
     Book saveBook(Book book);
     
     Book updateBook(Long id,Book book);
