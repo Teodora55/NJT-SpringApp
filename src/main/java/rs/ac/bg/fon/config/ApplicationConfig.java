@@ -39,14 +39,14 @@ public class ApplicationConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-    
+
     @Bean
-    public CommandLineRunner loadData(){
+    public CommandLineRunner loadData() {
         return args -> {
             dataService.fetchBooksFromApi();
         };

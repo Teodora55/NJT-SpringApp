@@ -1,6 +1,7 @@
 package rs.ac.bg.fon.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,10 +10,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,10 +41,17 @@ public class User implements UserDetails{
     @Column
     String password;
     
+    @Column
+    LocalDate membershipExpiration;
+    
     @OneToOne
     @JoinColumn(name = "customer_id")
     @JsonManagedReference
     private Customer customer;
+    
+    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<Notification> notifications;
     
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -62,7 +73,7 @@ public class User implements UserDetails{
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return LocalDate.now().isBefore(membershipExpiration);
     }
 
     @Override

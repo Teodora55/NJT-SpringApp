@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import rs.ac.bg.fon.model.Author;
 import rs.ac.bg.fon.model.Book;
 import rs.ac.bg.fon.model.BookCopy;
+import rs.ac.bg.fon.model.BookCopyStatus;
 import rs.ac.bg.fon.model.Bookshelf;
 import rs.ac.bg.fon.repository.AuthorRepository;
 import rs.ac.bg.fon.repository.BookCopyRepository;
@@ -113,6 +114,7 @@ public class LoadDataService {
         BookCopy bookCopy = BookCopy.builder()
                 .book(book)
                 .isbn(createIsbn(book.getId()))
+                .status(BookCopyStatus.AVAILABLE)
                 .build();
         bookCopyRepository.saveAndFlush(bookCopy);
     }

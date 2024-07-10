@@ -2,7 +2,9 @@ package rs.ac.bg.fon.service.impl;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.model.Customer;
+import rs.ac.bg.fon.model.Notification;
 import rs.ac.bg.fon.model.Role;
 import rs.ac.bg.fon.model.User;
 import rs.ac.bg.fon.repository.CustomerRepository;
@@ -55,7 +58,9 @@ public class AuthenticationService {
                 null,
                 request.getUsername(),
                 passwordEncoder.encode(request.getPassword()),
+                LocalDate.now().plusYears(1),
                 customer,
+                new HashSet<>(),
                 Role.USER);
         userRepository.save(user);
         return this.prepareResponse(user, response);
@@ -80,6 +85,7 @@ public class AuthenticationService {
                 .username(user.getUsername())
                 .role(user.getRole().toString())
                 .customerId(user.getCustomer().getId())
+                .notifications(user.getNotifications())
                 .build();
     }
 

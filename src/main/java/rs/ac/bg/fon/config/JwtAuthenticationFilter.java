@@ -2,7 +2,6 @@ package rs.ac.bg.fon.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
@@ -33,16 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        Cookie[] cookies = request.getCookies();
-        String token = null;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("token".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
+        String token = jwtService.extractToken(request);
         if (token == null) {
             filterChain.doFilter(request, response);
             return;

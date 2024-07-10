@@ -18,16 +18,20 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/login/**").permitAll()
+                .requestMatchers("user/membership").permitAll()
+                .requestMatchers("/customer/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authenticationProvider(authenticationProvider)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
