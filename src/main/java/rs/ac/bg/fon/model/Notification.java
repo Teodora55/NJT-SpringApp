@@ -45,13 +45,16 @@ public class Notification {
     @Column
     private boolean received;
 
-    public Notification(String message, String title, User recipient, User sender, boolean received) {
+    public Notification() {
+    }
+
+    public Notification(String message, String title, User recipient, User sender) {
         this.title = title;
         this.message = message;
         this.recipient = recipient;
         this.sender = sender;
         this.date = LocalDate.now();
-        this.received = received;
+        this.received = false;
     }
 
 }

@@ -12,6 +12,9 @@ import rs.ac.bg.fon.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
+    
+//    @Query(value = "Select user u SET u.membership_expiration = :expirationDate WHERE u.id = :id", nativeQuery = true)
+    Optional<User> findByCustomerId(@Param("id") Long customerId);
 
     @Modifying
     @Transactional
