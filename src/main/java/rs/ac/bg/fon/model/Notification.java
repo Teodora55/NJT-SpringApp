@@ -31,7 +31,7 @@ public class Notification {
 
     @ManyToOne
     @JoinColumn(name = "recipient_id")
-    @JsonBackReference
+    @JsonBackReference(value = "recipient-notifications")
     private User recipient;
 
     @ManyToOne

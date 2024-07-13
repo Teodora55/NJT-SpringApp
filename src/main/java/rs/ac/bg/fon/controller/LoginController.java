@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.bg.fon.service.impl.AuthenticationService;
 import rs.ac.bg.fon.service.impl.JwtService;
 import rs.ac.bg.fon.util.AuthenticationRequest;
-import rs.ac.bg.fon.util.AuthenticationResponse;
+import rs.ac.bg.fon.util.UserDTO;
 import rs.ac.bg.fon.util.RegisterRequest;
 
 @RestController
@@ -26,7 +26,7 @@ public class LoginController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterRequest request, HttpServletResponse response) {
-        AuthenticationResponse authResponse= authenticationService.register(request, response);
+        UserDTO authResponse= authenticationService.register(request, response);
         if (authResponse == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -35,7 +35,7 @@ public class LoginController {
 
     @PostMapping("/")
     public ResponseEntity authenticate(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
-        AuthenticationResponse authResponse = authenticationService.authenticate(request, response);
+        UserDTO authResponse = authenticationService.authenticate(request, response);
         if (authResponse == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

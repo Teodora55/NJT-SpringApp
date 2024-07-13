@@ -8,7 +8,7 @@ import rs.ac.bg.fon.model.User;
 import rs.ac.bg.fon.repository.NotificationRepository;
 import rs.ac.bg.fon.repository.UserRepository;
 import rs.ac.bg.fon.service.NotificationService;
-import rs.ac.bg.fon.util.NotificationRequest;
+import rs.ac.bg.fon.util.NotificationDTO;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -20,7 +20,7 @@ public class NotificationServiceImpl implements NotificationService {
     private UserRepository userRepository;
 
     @Override
-    public Notification sendNotification(NotificationRequest request) {
+    public Notification sendNotification(NotificationDTO request) {
         User sender = userRepository.findByUsername(request.getSender()).orElse(null);
         User recipient = userRepository.findByCustomerId(request.getRecipient()).orElse(null);
         Notification notification = new Notification(request.getMessage(), request.getTitle(), recipient, sender);
@@ -28,7 +28,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Notification sendNotificationToAll(NotificationRequest request) {
+    public Notification sendNotificationToAll(NotificationDTO request) {
         User sender = userRepository.findByUsername(request.getSender()).orElse(null);
         Notification notification = new Notification(request.getMessage(), request.getTitle(), null, sender);
         List<User> users = userRepository.findAll();
@@ -41,6 +41,11 @@ public class NotificationServiceImpl implements NotificationService {
             }
         }
         return successfullySaved ? notification : null;
+    }
+
+    @Override
+    public boolean receivedNotification(Long id) {
+        return notificationRepository.markAsReceived(id) > 0;
     }
 
 }

@@ -50,7 +50,7 @@ public class User implements UserDetails{
     private Customer customer;
     
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "recipient-notifications")
     private Set<Notification> notifications;
     
     @Enumerated(EnumType.STRING)

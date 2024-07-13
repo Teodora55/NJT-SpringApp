@@ -20,7 +20,6 @@ import rs.ac.bg.fon.model.Customer;
 import rs.ac.bg.fon.model.User;
 import rs.ac.bg.fon.service.BookRentalService;
 import rs.ac.bg.fon.service.BookService;
-import rs.ac.bg.fon.service.CustomerService;
 import rs.ac.bg.fon.service.impl.JwtService;
 import rs.ac.bg.fon.util.DateHelper;
 
@@ -33,9 +32,6 @@ public class BookRentalController {
 
     @Autowired
     private BookService bookService;
-
-    @Autowired
-    private CustomerService customerService;
 
     @Autowired
     private JwtService jwtService;
