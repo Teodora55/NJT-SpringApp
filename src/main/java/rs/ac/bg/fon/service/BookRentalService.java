@@ -1,32 +1,26 @@
 package rs.ac.bg.fon.service;
 
 import java.util.List;
-import org.springframework.data.domain.Page;
 import rs.ac.bg.fon.model.Book;
 import rs.ac.bg.fon.model.BookRental;
 import rs.ac.bg.fon.model.Customer;
+import rs.ac.bg.fon.util.BookRentalDTO;
 
 public interface BookRentalService {
 
-    BookRental saveBookRental(BookRental bookRental);
-
-    List<BookRental> findAll();
+    List<BookRentalDTO> findAll();
 
     BookRental findById(Long id);
 
-    BookRental update(BookRental bookRental, Long id);
-
-    BookRental delete(Long id);
-
-    BookRental findExistingRental(Long customerId,String isbn);
+    BookRentalDTO returnBook(Long id);
+    
+    BookRentalDTO extendReturnByDate(Long id);
     
     BookRental findExistingRentalByBookId(Long customerId,Long bookId);
+    
+    BookRentalDTO createRental(Customer customer, Book book);
 
-    void deleteByCustomerId(Long customerId);
+    List<BookRentalDTO> findByCustomer(Long customerId);
 
-    Page<BookRental> search(String searchInput, int pageNo, int itemsPerPage);
-
-    List<BookRental> findByCustomer(Long customerId);
-
-    BookRental createRental(Customer customer, Book book);
+    public List<BookRentalDTO> findCustomersCurrentRentals(Long id);
 }

@@ -12,7 +12,7 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, String> {
     @Query("UPDATE BookCopy bc SET bc.status = :status WHERE bc.isbn = :isbn")
     void updateTitle(@Param("isbn") String isbn, @Param("status") BookCopyStatus status);
 
-    BookCopy findByIsbn(String bn);
+    BookCopy findByIsbn(String isbn);
 
     @Query(value = "SELECT book_copy.* FROM book_copy JOIN rentals ON book_copy.isbn = rentals.book_id "
                 + "WHERE rentals.customer_id = :customerId AND rentals.returned_at = NULL", nativeQuery = true)
