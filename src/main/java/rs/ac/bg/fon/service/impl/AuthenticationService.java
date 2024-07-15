@@ -13,8 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.model.Customer;
 import rs.ac.bg.fon.model.Role;
+import rs.ac.bg.fon.model.Token;
 import rs.ac.bg.fon.model.User;
 import rs.ac.bg.fon.repository.CustomerRepository;
+import rs.ac.bg.fon.repository.TokenRepository;
 import rs.ac.bg.fon.repository.UserRepository;
 import rs.ac.bg.fon.util.AuthenticationRequest;
 import rs.ac.bg.fon.util.UserDTO;
@@ -38,6 +40,9 @@ public class AuthenticationService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    
+    @Autowired
+    private TokenRepository tokenRepository;
 
     public UserDTO register(RegisterRequest request, HttpServletResponse response) {
         if (userRepository.findByUsername(request.getUsername()).orElse(null) != null) {
@@ -73,11 +78,16 @@ public class AuthenticationService {
 
     private UserDTO prepareResponse(User user, HttpServletResponse response) {
         String jwtToken = jwtService.generateToken(user);
+        saveToken(jwtToken);
         Cookie cookie = new Cookie("token", jwtToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(24 * 3600);
         response.addCookie(cookie);
+        return createUserDTO(user);
+    }
+    
+    private UserDTO createUserDTO(User user){
         return UserDTO.builder()
                 .firstname(user.getCustomer().getFirstname())
                 .lastname(user.getCustomer().getLastname())
@@ -89,6 +99,13 @@ public class AuthenticationService {
                 .notifications(user.getNotifications())
                 .membershipExpiration(user.getMembershipExpiration())
                 .build();
+    }
+            
+    private void saveToken(String jwt){
+        Token token = new Token();
+        token.setToken(jwt);
+        token.setTokenValid(true);
+        tokenRepository.save(token);
     }
 
 }

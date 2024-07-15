@@ -12,14 +12,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.stereotype.Service;
+import rs.ac.bg.fon.model.Token;
+import rs.ac.bg.fon.repository.TokenRepository;
 
 @Service
 public class JwtService {
 
     private static final String SECRET_KEY = "6f795c786e3474736164577a5c5d5f3a61324c7a7e54702c2a4d5d7b49";
+
+    @Autowired
+    private TokenRepository tokenRepository;
 
     public String extractToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -67,9 +73,11 @@ public class JwtService {
         return generateToken(new HashMap<String, Object>(), userDetails);
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean isTokenValid(String jwt, UserDetails userDetails) {
+        Token token = tokenRepository.findByToken(jwt).orElse(null);
+        final String username = extractUsername(jwt);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(jwt)
+                && token != null && token.isTokenValid();
     }
 
     private boolean isTokenExpired(String token) {
