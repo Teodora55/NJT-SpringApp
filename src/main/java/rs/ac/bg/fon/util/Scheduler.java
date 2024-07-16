@@ -70,7 +70,7 @@ public class Scheduler {
     private void sendExpirationMail(User user, int numOfDays) {
         try {
             String htmlBody = new String(Files.readAllBytes(Paths.get("src/main/resources/templates/membership_expiration.html")));
-            htmlBody = htmlBody.replace("{{name}}", user.getUsername());
+            htmlBody = htmlBody.replace("{{name}}", user.getCustomer().getFirstname());
             String days = numOfDays > 1 ? numOfDays + " days" : "1 day";
             htmlBody = htmlBody.replace("{{numOfDays}}", days);
 
