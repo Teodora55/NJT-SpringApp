@@ -1,5 +1,6 @@
 package rs.ac.bg.fon.repository;
 
+import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +23,8 @@ public interface BookRentalRepository extends JpaRepository<BookRental, Long> {
 
     @Query(value = "SELECT * FROM rentals r WHERE MONTH(r.borrowed_at) = :month AND YEAR(r.borrowed_at) = :year", nativeQuery = true)
     List<BookRental> findLastMonthRentals(@Param(value = "month") int month, @Param(value = "year") int year);
+
+    @Query("SELECT br FROM BookRental br WHERE br.returnBy = :day AND br.returnedAt IS NULL")
+    List<BookRental> findRentalsDue(@Param("day") LocalDate day);
 
 }
