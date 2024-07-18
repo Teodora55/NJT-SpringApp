@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.bg.fon.model.Book;
 import rs.ac.bg.fon.model.Customer;
 import rs.ac.bg.fon.model.User;
+import rs.ac.bg.fon.model.dto.BookDTO;
 import rs.ac.bg.fon.service.BookRentalService;
 import rs.ac.bg.fon.service.BookService;
 import rs.ac.bg.fon.service.impl.JwtService;
-import rs.ac.bg.fon.util.BookRentalDTO;
+import rs.ac.bg.fon.model.dto.BookRentalDTO;
 
 @RestController
 @RequestMapping(value = "rental", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -77,8 +78,9 @@ public class BookRentalController {
         User user = (User) userDetailsService.loadUserByUsername(customerUsername);
         Book book = bookService.getBook(bookId);
         if (user != null && user.getCustomer() != null
-                && book != null
-                && bookRentalService.findExistingRentalByBookId(user.getCustomer().getId(), bookId) == null) {
+                && book != null) {
+            if(bookRentalService.findExistingRentalByBookId(user.getCustomer().getId(), bookId) == null)
+                return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
             Customer customer = user.getCustomer();
             BookRentalDTO rental = bookRentalService.createRental(customer, book);
             if (rental == null) {

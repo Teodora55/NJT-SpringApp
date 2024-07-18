@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rs.ac.bg.fon.model.Author;
+import rs.ac.bg.fon.model.dto.AuthorDTO;
 import rs.ac.bg.fon.service.AuthorService;
 
 @RestController
@@ -19,15 +19,16 @@ public class AuthorController {
     private AuthorService authorService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable("id") Long id) {
-        Author author = authorService.getAuthor(id);
-        return author != null ? new ResponseEntity<Author>(author, HttpStatus.OK)
-                : new ResponseEntity<Author>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable("id") Long id) {
+        AuthorDTO author = authorService.getAuthor(id);
+        return author != null ? new ResponseEntity<AuthorDTO>(author, HttpStatus.OK)
+                : new ResponseEntity<AuthorDTO>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Author>> getAuthors() {
-        List<Author> authors = authorService.getAllAuthors();
-        return authors.isEmpty() ? new ResponseEntity<List<Author>>(HttpStatus.NOT_FOUND) : new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
+    public ResponseEntity<List<AuthorDTO>> getAuthors() {
+        List<AuthorDTO> authors = authorService.getAllAuthors();
+        return authors.isEmpty() ? new ResponseEntity<List<AuthorDTO>>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<List<AuthorDTO>>(authors, HttpStatus.OK);
     }
 }

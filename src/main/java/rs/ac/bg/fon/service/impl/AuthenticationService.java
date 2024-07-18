@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,8 @@ import rs.ac.bg.fon.repository.NotificationRepository;
 import rs.ac.bg.fon.repository.TokenRepository;
 import rs.ac.bg.fon.repository.UserRepository;
 import rs.ac.bg.fon.util.AuthenticationRequest;
-import rs.ac.bg.fon.util.UserDTO;
+import rs.ac.bg.fon.model.dto.UserDTO;
+import rs.ac.bg.fon.model.mapper.UserMapper;
 import rs.ac.bg.fon.util.RegisterRequest;
 import rs.ac.bg.fon.util.Scheduler;
 
@@ -106,21 +106,7 @@ public class AuthenticationService {
         cookie.setPath("/");
         cookie.setMaxAge(24 * 3600);
         response.addCookie(cookie);
-        return createUserDTO(user);
-    }
-
-    private UserDTO createUserDTO(User user) {
-        return UserDTO.builder()
-                .firstname(user.getCustomer().getFirstname())
-                .lastname(user.getCustomer().getLastname())
-                .username(user.getUsername())
-                .email(user.getCustomer().getEmail())
-                .jmbg(user.getCustomer().getJmbg())
-                .role(user.getRole().toString())
-                .customerId(user.getCustomer().getId())
-                .notifications(user.getNotifications())
-                .membershipExpiration(user.getMembershipExpiration())
-                .build();
+        return UserMapper.toDto(user);
     }
 
     private void saveToken(String jwt) {

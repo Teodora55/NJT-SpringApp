@@ -1,23 +1,28 @@
 package rs.ac.bg.fon.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.model.Author;
+import rs.ac.bg.fon.model.dto.AuthorDTO;
+import rs.ac.bg.fon.model.mapper.AuthorMapper;
 import rs.ac.bg.fon.repository.AuthorRepository;
 import rs.ac.bg.fon.service.AuthorService;
 
 @Service
-public class AuthorServiceImpl implements AuthorService{
+public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private AuthorRepository authorRepository;
 
-    public Author saveAuthor(Author author) {
-        return authorRepository.save(author);
+    @Override
+    public AuthorDTO saveAuthor(AuthorDTO author) {
+        return AuthorMapper.toDto(authorRepository.save(AuthorMapper.toEntity(author)));
     }
 
-    public Author updateAuthor(Long id, Author updatedAuthor) {
+    @Override
+    public AuthorDTO updateAuthor(Long id, AuthorDTO updatedAuthor) {
         Author existingAuthor = authorRepository.findById(id).orElse(null);
 
         if (existingAuthor != null) {
@@ -25,27 +30,29 @@ public class AuthorServiceImpl implements AuthorService{
             existingAuthor.setLastname(updatedAuthor.getLastname());
             existingAuthor.setYearOfBirth(updatedAuthor.getYearOfBirth());
             existingAuthor.setYearOfDeath(updatedAuthor.getYearOfDeath());
-            existingAuthor.setBooks(updatedAuthor.getBooks());
 
-            return authorRepository.save(existingAuthor);
+            return AuthorMapper.toDto(authorRepository.save(existingAuthor));
         }
         return null;
     }
 
-    public Author deleteAuthor(Long id) {
+    @Override
+    public AuthorDTO deleteAuthor(Long id) {
         Author author = authorRepository.findById(id).orElse(null);
         if (author != null) {
             authorRepository.deleteById(id);
         }
-        return author;
+        return AuthorMapper.toDto(author);
     }
 
-    public Author getAuthor(Long id) {
-        return authorRepository.findById(id).orElse(null);
+    @Override
+    public AuthorDTO getAuthor(Long id) {
+        return AuthorMapper.toDto(authorRepository.findById(id).orElse(null));
     }
 
-    public List<Author> getAllAuthors() {
-        return authorRepository.findAll();
+    @Override
+    public List<AuthorDTO> getAllAuthors() {
+        return authorRepository.findAll().stream().map(AuthorMapper::toDto).collect(Collectors.toList());
     }
+
 }
-

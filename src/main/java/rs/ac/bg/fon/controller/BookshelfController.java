@@ -7,20 +7,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rs.ac.bg.fon.model.Bookshelf;
+import rs.ac.bg.fon.model.dto.BookshelfDTO;
 import rs.ac.bg.fon.service.BookshelfService;
 
 @RestController
 @RequestMapping("/bookshelf")
 public class BookshelfController {
-    
+
     @Autowired
     private BookshelfService bookshelfService;
-    
-        @GetMapping("/all")
-    public ResponseEntity<List<Bookshelf>> getBookshelves(){
-        List<Bookshelf> shelves = bookshelfService.getAllBookshelves();
-        return shelves.isEmpty() ?  new ResponseEntity<List<Bookshelf>>(HttpStatus.NOT_FOUND) : new ResponseEntity<List<Bookshelf>>(shelves, HttpStatus.OK);
+
+    @GetMapping("/all")
+    public ResponseEntity<List<BookshelfDTO>> getBookshelves() {
+        List<BookshelfDTO> shelves = bookshelfService.getAllBookshelves();
+        return shelves.isEmpty() ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(shelves, HttpStatus.OK);
     }
-    
+
 }

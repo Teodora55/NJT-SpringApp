@@ -4,7 +4,7 @@ import java.util.List;
 import rs.ac.bg.fon.model.Book;
 import rs.ac.bg.fon.model.BookRental;
 import rs.ac.bg.fon.model.Customer;
-import rs.ac.bg.fon.util.BookRentalDTO;
+import rs.ac.bg.fon.model.dto.BookRentalDTO;
 
 public interface BookRentalService {
 

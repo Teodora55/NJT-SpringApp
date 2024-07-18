@@ -1,11 +1,16 @@
 package rs.ac.bg.fon.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.bg.fon.model.Book;
-import rs.ac.bg.fon.model.BookCopy;
+import rs.ac.bg.fon.model.dto.BookCopyDTO;
+import rs.ac.bg.fon.model.dto.BookDTO;
+import rs.ac.bg.fon.model.mapper.AuthorMapper;
+import rs.ac.bg.fon.model.mapper.BookCopyMapper;
+import rs.ac.bg.fon.model.mapper.BookMapper;
 import rs.ac.bg.fon.repository.BookRepository;
 import rs.ac.bg.fon.service.BookService;
 
@@ -15,42 +20,56 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public Book saveBook(Book book) {
-        return bookRepository.save(book);
+    @Override
+    public BookDTO saveBook(BookDTO book) {
+        return BookMapper.toDto(bookRepository.save(BookMapper.toEntity(book)));
     }
 
     @Transactional
-    public Book updateBook(Long id, Book book) {
+    @Override
+    public BookDTO updateBook(Long id, BookDTO book) {
         Book existing = bookRepository.findById(id).orElse(null);
         if (existing != null) {
-            book.setName(existing.getName());
-            book.setAuthor(existing.getAuthor());
-            bookRepository.save(book);
-            return book;
+            existing.setName(book.getName());
+            existing.setAuthor(book.getAuthors()
+                    .stream().map(AuthorMapper::toEntity).collect(Collectors.toSet()));
+            bookRepository.save(existing);
+            return BookMapper.toDto(existing);
         }
         return null;
     }
 
     @Transactional
-    public Book deleteBook(Long id) {
+    @Override
+    public BookDTO deleteBook(Long id) {
         Book existing = bookRepository.findById(id).orElse(null);
         if (existing != null) {
             bookRepository.delete(existing);
-            return existing;
+            return BookMapper.toDto(existing);
         }
         return null;
     }
 
+    @Override
     public Book getBook(Long id) {
         return bookRepository.findById(id).orElse(null);
     }
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    @Override
+    public BookDTO getBookDTO(Long id) {
+        return BookMapper.toDto(bookRepository.findById(id).orElse(null));
     }
 
-    public List<BookCopy> getAllBookCopies(Long bookId) {
-        return bookRepository.getAllBookCopies(bookId);
+    @Override
+    public List<BookDTO> getAllBooks() {
+        return bookRepository.findAll()
+                .stream().map(BookMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookCopyDTO> getAllBookCopies(Long bookId) {
+        return bookRepository.getAllBookCopies(bookId)
+                .stream().map(BookCopyMapper::toDto).collect(Collectors.toList());
     }
 
 }

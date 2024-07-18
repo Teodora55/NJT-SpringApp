@@ -1,6 +1,6 @@
 package rs.ac.bg.fon.service;
 
-import rs.ac.bg.fon.util.UserDTO;
+import rs.ac.bg.fon.model.dto.UserDTO;
 
 public interface UserService {
     

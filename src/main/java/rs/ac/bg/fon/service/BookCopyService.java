@@ -1,18 +1,18 @@
 package rs.ac.bg.fon.service;
 
 import java.util.List;
-import rs.ac.bg.fon.model.BookCopy;
 import rs.ac.bg.fon.model.BookCopyStatus;
+import rs.ac.bg.fon.model.dto.BookCopyDTO;
 
 public interface BookCopyService {
 
-    BookCopy createBookCopy(BookCopy book);
+    BookCopyDTO createBookCopy(BookCopyDTO book);
     
-    BookCopy findBookCopy(String isbn);
+    BookCopyDTO findBookCopy(String isbn);
     
-    List<BookCopy> findBorrowedBooks(Long customerId);
+    List<BookCopyDTO> findBorrowedBooks(Long customerId);
 
-    BookCopy updateBookCopyStatus(String isbn, BookCopyStatus bookStatus);
+    BookCopyDTO updateBookCopyStatus(String isbn, BookCopyStatus bookStatus);
 
-    BookCopy deleteBookCopy(String isbn);
+    BookCopyDTO deleteBookCopy(String isbn);
 }

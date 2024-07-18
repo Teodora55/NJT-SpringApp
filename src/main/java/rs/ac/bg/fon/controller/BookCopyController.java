@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rs.ac.bg.fon.model.BookCopy;
+import rs.ac.bg.fon.model.dto.BookCopyDTO;
 import rs.ac.bg.fon.service.BookCopyService;
 
 @RestController
@@ -19,10 +19,10 @@ public class BookCopyController {
     private BookCopyService bookService;
     
         @GetMapping("/{customerId}")
-    public ResponseEntity<List<BookCopy>> getBooks(@PathVariable("customerId") Long id){
-        List<BookCopy> books = bookService.findBorrowedBooks(id);
-        return !books.isEmpty() ? new ResponseEntity<List<BookCopy>>(books, HttpStatus.OK) : 
-                new ResponseEntity<List<BookCopy>>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<BookCopyDTO>> getBooks(@PathVariable("customerId") Long id){
+        List<BookCopyDTO> books = bookService.findBorrowedBooks(id);
+        return !books.isEmpty() ? new ResponseEntity<List<BookCopyDTO>>(books, HttpStatus.OK) : 
+                new ResponseEntity<List<BookCopyDTO>>(HttpStatus.NOT_FOUND);
     }
     
 }

@@ -29,8 +29,4 @@ public class Bookshelf {
     @Column
     String name;
 
-    @ManyToMany(mappedBy = "bookshelves")
-    @JsonBackReference
-    Set<Book> books;
-
 }

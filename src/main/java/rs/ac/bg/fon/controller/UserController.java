@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.bg.fon.model.Notification;
 import rs.ac.bg.fon.service.UserService;
 import rs.ac.bg.fon.service.impl.JwtService;
-import rs.ac.bg.fon.util.UserDTO;
+import rs.ac.bg.fon.model.dto.UserDTO;
 
 @RestController
 @RequestMapping("/user")

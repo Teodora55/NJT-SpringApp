@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rs.ac.bg.fon.model.Book;
+import rs.ac.bg.fon.model.dto.BookDTO;
 import rs.ac.bg.fon.service.BookService;
 
 @RestController
@@ -23,34 +23,34 @@ public class BookController {
     private BookService bookService;
     
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable("id") Long id){
-        Book book = bookService.getBook(id);
-        return book != null ? new ResponseEntity<Book>(book, HttpStatus.OK) : 
-                new ResponseEntity<Book>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<BookDTO> getBookById(@PathVariable("id") Long id){
+        BookDTO book = bookService.getBookDTO(id);
+        return book != null ? new ResponseEntity<BookDTO>(book, HttpStatus.OK) : 
+                new ResponseEntity<BookDTO>(HttpStatus.NOT_FOUND);
     }
     
     @GetMapping("/all")
-    public ResponseEntity<List<Book>> getBooks(){
-        List<Book> books = bookService.getAllBooks();
-        return books.isEmpty() ?  new ResponseEntity<List<Book>>(HttpStatus.NOT_FOUND) : new ResponseEntity<List<Book>>(books, HttpStatus.OK);
+    public ResponseEntity<List<BookDTO>> getBooks(){
+        List<BookDTO> books = bookService.getAllBooks();
+        return books.isEmpty() ?  new ResponseEntity<List<BookDTO>>(HttpStatus.NOT_FOUND) : new ResponseEntity<List<BookDTO>>(books, HttpStatus.OK);
     }
     
     @PostMapping
-    public ResponseEntity<Book> saveBooks(@RequestBody Book book){
-        return new ResponseEntity<Book>(bookService.saveBook(book), HttpStatus.OK);
+    public ResponseEntity<BookDTO> saveBooks(@RequestBody BookDTO book){
+        return new ResponseEntity<BookDTO>(bookService.saveBook(book), HttpStatus.OK);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable("id") Long id,@RequestBody Book book){
-        Book updatedBook = bookService.updateBook(id, book);
-        return updatedBook != null ? new ResponseEntity<Book>(HttpStatus.OK) : 
-                new ResponseEntity<Book>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<BookDTO> updateBook(@PathVariable("id") Long id,@RequestBody BookDTO book){
+        BookDTO updatedBook = bookService.updateBook(id, book);
+        return updatedBook != null ? new ResponseEntity<BookDTO>(HttpStatus.OK) : 
+                new ResponseEntity<BookDTO>(HttpStatus.NOT_FOUND);
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Book> deleteBook(@PathVariable("id") Long id){
-        Book book = bookService.deleteBook(id);
-        return book != null ? new ResponseEntity<Book>(HttpStatus.OK) : 
-                new ResponseEntity<Book>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<BookDTO> deleteBook(@PathVariable("id") Long id){
+        BookDTO book = bookService.deleteBook(id);
+        return book != null ? new ResponseEntity<BookDTO>(HttpStatus.OK) : 
+                new ResponseEntity<BookDTO>(HttpStatus.NOT_FOUND);
     }
 }

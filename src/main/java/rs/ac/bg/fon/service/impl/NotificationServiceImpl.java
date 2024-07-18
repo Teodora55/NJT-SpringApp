@@ -8,7 +8,8 @@ import rs.ac.bg.fon.model.User;
 import rs.ac.bg.fon.repository.NotificationRepository;
 import rs.ac.bg.fon.repository.UserRepository;
 import rs.ac.bg.fon.service.NotificationService;
-import rs.ac.bg.fon.util.NotificationDTO;
+import rs.ac.bg.fon.model.dto.NotificationDTO;
+import rs.ac.bg.fon.model.mapper.NotificationMapper;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -20,16 +21,16 @@ public class NotificationServiceImpl implements NotificationService {
     private UserRepository userRepository;
 
     @Override
-    public Notification sendNotification(NotificationDTO request) {
-        User sender = userRepository.findByUsername(request.getSender()).orElse(null);
-        User recipient = userRepository.findByCustomerId(request.getRecipient()).orElse(null);
+    public NotificationDTO sendNotification(NotificationDTO request) {
+        User sender = userRepository.findByUsername(request.getSenderUsername()).orElse(null);
+        User recipient = userRepository.findByCustomerId(request.getRecipientId()).orElse(null);
         Notification notification = new Notification(request.getMessage(), request.getTitle(), recipient, sender);
-        return notificationRepository.save(notification);
+        return NotificationMapper.toDto(notificationRepository.save(notification));
     }
 
     @Override
-    public Notification sendNotificationToAll(NotificationDTO request) {
-        User sender = userRepository.findByUsername(request.getSender()).orElse(null);
+    public NotificationDTO sendNotificationToAll(NotificationDTO request) {
+        User sender = userRepository.findByUsername(request.getSenderUsername()).orElse(null);
         Notification notification = new Notification(request.getMessage(), request.getTitle(), null, sender);
         List<User> users = userRepository.findAll();
         boolean successfullySaved = true;
@@ -40,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
                 successfullySaved = false;
             }
         }
-        return successfullySaved ? notification : null;
+        return successfullySaved ? NotificationMapper.toDto(notification) : null;
     }
 
     @Override
