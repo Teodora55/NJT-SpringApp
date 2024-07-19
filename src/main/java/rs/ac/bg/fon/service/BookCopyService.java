@@ -15,4 +15,6 @@ public interface BookCopyService {
     BookCopyDTO updateBookCopyStatus(String isbn, BookCopyStatus bookStatus);
 
     BookCopyDTO deleteBookCopy(String isbn);
+    
+    Long getAvailableCopiesCount(Long bookId);
 }

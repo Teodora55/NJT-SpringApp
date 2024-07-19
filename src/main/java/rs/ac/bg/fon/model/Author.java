@@ -38,7 +38,7 @@ public class Author {
     @Column
     private Integer yearOfDeath;
     
-    @ManyToMany(mappedBy = "author")
+    @ManyToMany(mappedBy = "authors")
     @JsonBackReference
     private Set<Book> books;
 

@@ -1,10 +1,13 @@
 package rs.ac.bg.fon.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.bg.fon.model.Customer;
+import rs.ac.bg.fon.model.dto.CustomerDTO;
+import rs.ac.bg.fon.model.mapper.CustomerMapper;
 import rs.ac.bg.fon.repository.CustomerRepository;
 import rs.ac.bg.fon.service.CustomerService;
 
@@ -14,38 +17,44 @@ public class CustomerServiceImpl implements CustomerService{
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    @Override
+    public CustomerDTO saveCustomer(CustomerDTO customer) {
+        return CustomerMapper.toDto(customerRepository.save(CustomerMapper.toEntity(customer)));
     }
 
     @Transactional
-    public Customer updateCustomer(Long id, Customer customer) {
+    @Override
+    public CustomerDTO updateCustomer(Long id, CustomerDTO customer) {
         Customer existing = customerRepository.findById(id).orElse(null);
         if (existing != null) {
-            customer.setFirstname(existing.getFirstname());
-            customer.setLastname(existing.getLastname());
-            customer.setJmbg(existing.getJmbg());
-            customerRepository.save(customer);
+            existing.setFirstname(customer.getFirstname());
+            existing.setLastname(customer.getLastname());
+            existing.setEmail(customer.getEmail());
+            customerRepository.save(existing);
             return customer;
         }
         return null;
     }
 
     @Transactional
-    public Customer deleteCustomer(Long id) {
+    @Override
+    public CustomerDTO deleteCustomer(Long id) {
         Customer existing = customerRepository.findById(id).orElse(null);
         if (existing != null) {
             customerRepository.delete(existing);
-            return existing;
+            return CustomerMapper.toDto(existing);
         }
         return null;
     }
 
-    public Customer getCustomer(Long id) {
-        return customerRepository.findById(id).orElse(null);
+    @Override
+    public CustomerDTO getCustomer(Long id) {
+        return CustomerMapper.toDto(customerRepository.findById(id).orElse(null));
     }
 
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    @Override
+    public List<CustomerDTO> getAllCustomers() {
+        return customerRepository.findAll()
+                .stream().map(CustomerMapper::toDto).collect(Collectors.toList());
     }
 }

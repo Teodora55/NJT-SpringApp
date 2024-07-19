@@ -12,17 +12,22 @@ import rs.ac.bg.fon.model.dto.BookCopyDTO;
 import rs.ac.bg.fon.service.BookCopyService;
 
 @RestController
-@RequestMapping("/borowed-book")
+@RequestMapping("/bookCopies")
 public class BookCopyController {
-    
+
     @Autowired
     private BookCopyService bookService;
-    
-        @GetMapping("/{customerId}")
-    public ResponseEntity<List<BookCopyDTO>> getBooks(@PathVariable("customerId") Long id){
+
+    @GetMapping("/{customerId}")
+    public ResponseEntity<List<BookCopyDTO>> getBooks(@PathVariable("customerId") Long id) {
         List<BookCopyDTO> books = bookService.findBorrowedBooks(id);
-        return !books.isEmpty() ? new ResponseEntity<List<BookCopyDTO>>(books, HttpStatus.OK) : 
-                new ResponseEntity<List<BookCopyDTO>>(HttpStatus.NOT_FOUND);
+        return !books.isEmpty() ? new ResponseEntity<>(books, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    
+
+    @GetMapping("/available/{bookId}")
+    public ResponseEntity<Long> availableBookCopiesCount(@PathVariable("bookId") Long id) {
+        return new ResponseEntity<>(bookService.getAvailableCopiesCount(id), HttpStatus.OK);
+    }
+
 }

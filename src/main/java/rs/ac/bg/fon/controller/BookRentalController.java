@@ -79,7 +79,7 @@ public class BookRentalController {
         Book book = bookService.getBook(bookId);
         if (user != null && user.getCustomer() != null
                 && book != null) {
-            if(bookRentalService.findExistingRentalByBookId(user.getCustomer().getId(), bookId) == null)
+            if(bookRentalService.findExistingRentalByBookId(user.getCustomer().getId(), bookId) != null)
                 return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
             Customer customer = user.getCustomer();
             BookRentalDTO rental = bookRentalService.createRental(customer, book);

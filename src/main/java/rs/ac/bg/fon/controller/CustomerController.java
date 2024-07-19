@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.bg.fon.model.Customer;
+import rs.ac.bg.fon.model.dto.CustomerDTO;
 import rs.ac.bg.fon.service.CustomerService;
 
 @RestController
@@ -23,35 +24,35 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable("id") Long id) {
-        Customer customer = customerService.getCustomer(id);
-        return customer != null ? new ResponseEntity<Customer>(customer, HttpStatus.OK)
-                : new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable("id") Long id) {
+        CustomerDTO customer = customerService.getCustomer(id);
+        return customer != null ? new ResponseEntity<>(customer, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Customer>> getCustomers() {
-        List<Customer> customers = customerService.getAllCustomers();
-        return !customers.isEmpty() ? new ResponseEntity<List<Customer>>(customers, HttpStatus.OK)
-                : new ResponseEntity<List<Customer>>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<CustomerDTO>> getCustomers() {
+        List<CustomerDTO> customers = customerService.getAllCustomers();
+        return !customers.isEmpty() ? new ResponseEntity<>(customers, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
-    public ResponseEntity<Customer> saveCustomers(@RequestBody Customer customer) {
-        return new ResponseEntity<Customer>(customerService.saveCustomer(customer), HttpStatus.OK);
+    public ResponseEntity<CustomerDTO> saveCustomers(@RequestBody CustomerDTO customer) {
+        return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") Long id, @RequestBody Customer customer) {
-        Customer updatedCustomer = customerService.updateCustomer(id, customer);
-        return updatedCustomer != null ? new ResponseEntity<Customer>(updatedCustomer, HttpStatus.OK)
-                : new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable("id") Long id, @RequestBody CustomerDTO customer) {
+        CustomerDTO updatedCustomer = customerService.updateCustomer(id, customer);
+        return updatedCustomer != null ? new ResponseEntity<>(updatedCustomer, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") Long id) {
-        Customer customer = customerService.deleteCustomer(id);
-        return customer != null ? new ResponseEntity<Customer>(customer, HttpStatus.OK)
-                : new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable("id") Long id) {
+        CustomerDTO customer = customerService.deleteCustomer(id);
+        return customer != null ? new ResponseEntity<>(customer, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

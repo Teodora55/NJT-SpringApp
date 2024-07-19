@@ -16,10 +16,13 @@ public class NotificationMapper {
         }
 
         NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setId(notification.getId());
         notificationDTO.setMessage(notification.getMessage());
         notificationDTO.setTitle(notification.getTitle());
         notificationDTO.setRecipientId(notification.getRecipient().getId());
-        notificationDTO.setSenderUsername(notification.getSender().getUsername());
+        if (notification.getSender() != null) {
+            notificationDTO.setSenderUsername(notification.getSender().getUsername());
+        }
         notificationDTO.setDate(notification.getDate());
         notificationDTO.setReceived(notification.isReceived());
 
@@ -32,6 +35,7 @@ public class NotificationMapper {
         }
 
         Notification notification = new Notification();
+        notification.setId(notificationDTO.getId());
         notification.setMessage(notificationDTO.getMessage());
         notification.setTitle(notificationDTO.getTitle());
         notification.setRecipient(userRepository.findById(notificationDTO.getRecipientId()).orElse(null));

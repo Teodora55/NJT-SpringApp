@@ -15,7 +15,10 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, String> {
     BookCopy findByIsbn(String isbn);
 
     @Query(value = "SELECT book_copy.* FROM book_copy JOIN rentals ON book_copy.isbn = rentals.book_id "
-                + "WHERE rentals.customer_id = :customerId AND rentals.returned_at = NULL", nativeQuery = true)
+            + "WHERE rentals.customer_id = :customerId AND rentals.returned_at = NULL", nativeQuery = true)
     List<BookCopy> findBorrowedBooksByCustomer(Long customerId);
+
+    @Query("SELECT COUNT(bc) FROM BookCopy bc WHERE bc.book.id = :bookId AND bc.status = 0")
+    long countAvailableCopiesByBookId(@Param("bookId") Long bookId);
 
 }

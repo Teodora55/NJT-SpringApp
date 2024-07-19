@@ -52,4 +52,9 @@ public class BookCopyServiceImpl implements BookCopyService {
                 .stream().map(BookCopyMapper::toDto).collect(Collectors.toList());
     }
 
+    @Override
+    public Long getAvailableCopiesCount(Long bookId) {
+        return bookCopyRepository.countAvailableCopiesByBookId(bookId);
+    }
+
 }

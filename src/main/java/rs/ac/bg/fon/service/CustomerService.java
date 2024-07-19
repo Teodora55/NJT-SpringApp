@@ -1,18 +1,18 @@
 package rs.ac.bg.fon.service;
 
 import java.util.List;
-import rs.ac.bg.fon.model.Customer;
+import rs.ac.bg.fon.model.dto.CustomerDTO;
 
 public interface CustomerService {
 
-    Customer saveCustomer(Customer book);
+    CustomerDTO saveCustomer(CustomerDTO book);
 
-    Customer updateCustomer(Long id, Customer book);
+    CustomerDTO updateCustomer(Long id, CustomerDTO book);
 
-    Customer deleteCustomer(Long id);
+    CustomerDTO deleteCustomer(Long id);
 
-    Customer getCustomer(Long id);
+    CustomerDTO getCustomer(Long id);
 
-    List<Customer> getAllCustomers();
+    List<CustomerDTO> getAllCustomers();
 
 }

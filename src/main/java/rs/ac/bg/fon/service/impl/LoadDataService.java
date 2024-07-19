@@ -63,7 +63,7 @@ public class LoadDataService {
         if (book == null) {
             book = Book.builder()
                     .name(bookName)
-                    .author(convertAuthors(apiBook.getAuthors()))
+                    .authors(convertAuthors(apiBook.getAuthors()))
                     .bookshelves(readShelves(apiBook))
                     .coverUrl(apiBook.getFormats().get("image/jpeg"))
                     .build();
