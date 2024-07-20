@@ -2,13 +2,20 @@ package rs.ac.bg.fon.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.bg.fon.model.Book;
 import rs.ac.bg.fon.model.Customer;
 import rs.ac.bg.fon.model.User;
-import rs.ac.bg.fon.model.dto.BookDTO;
 import rs.ac.bg.fon.service.BookRentalService;
 import rs.ac.bg.fon.service.BookService;
 import rs.ac.bg.fon.service.impl.JwtService;
@@ -79,8 +85,9 @@ public class BookRentalController {
         Book book = bookService.getBook(bookId);
         if (user != null && user.getCustomer() != null
                 && book != null) {
-            if(bookRentalService.findExistingRentalByBookId(user.getCustomer().getId(), bookId) != null)
+            if (bookRentalService.findExistingRentalByBookId(user.getCustomer().getId(), bookId) != null) {
                 return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
+            }
             Customer customer = user.getCustomer();
             BookRentalDTO rental = bookRentalService.createRental(customer, book);
             if (rental == null) {
@@ -107,5 +114,16 @@ public class BookRentalController {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         return new ResponseEntity<>(rental, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/read/{isbn}")
+    public ResponseEntity<Resource> readBook(@PathVariable String isbn) {
+        Path filePath = Paths.get("src/main/resources", "books/bookTest.pdf");
+        Resource resource = new FileSystemResource(filePath);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .header("X-Content-Type-Options", "nosniff")
+                .body(resource);
     }
 }
