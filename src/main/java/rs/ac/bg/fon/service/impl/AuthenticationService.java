@@ -110,9 +110,7 @@ public class AuthenticationService {
     }
 
     private void saveToken(String jwt) {
-        Token token = new Token();
-        token.setToken(jwt);
-        token.setTokenValid(true);
+        Token token = new Token(jwt);
         tokenRepository.save(token);
     }
 

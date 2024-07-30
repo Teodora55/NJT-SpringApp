@@ -6,14 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "token")
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class Token {
 
@@ -25,6 +24,14 @@ public class Token {
     String token;
 
     @Column
+    LocalDateTime createdAt;
+
+    @Column
     boolean isTokenValid;
 
+    public Token(String token) {
+        this.token = token;
+        this.createdAt = LocalDateTime.now();
+        this.isTokenValid = true;
+    }
 }

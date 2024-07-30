@@ -17,7 +17,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         if (authException instanceof AccountExpiredException) {
             response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, "Account expired");
-        } else if (authException instanceof BadCredentialsException){
+        } else if (authException instanceof BadCredentialsException) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid username or password");
         }
     }

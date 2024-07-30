@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,10 +20,12 @@ import org.springframework.stereotype.Component;
 import rs.ac.bg.fon.model.BookCopyStatus;
 import rs.ac.bg.fon.model.BookRental;
 import rs.ac.bg.fon.model.Notification;
+import rs.ac.bg.fon.model.Token;
 import rs.ac.bg.fon.model.User;
 import rs.ac.bg.fon.repository.BookCopyRepository;
 import rs.ac.bg.fon.repository.BookRentalRepository;
 import rs.ac.bg.fon.repository.NotificationRepository;
+import rs.ac.bg.fon.repository.TokenRepository;
 import rs.ac.bg.fon.repository.UserRepository;
 
 @Component
@@ -41,6 +44,9 @@ public class Scheduler {
     private BookRentalRepository bookRentalRepository;
 
     @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
     private JavaMailSender mailSender;
 
     @Scheduled(cron = "0 0 0 * * ?")
@@ -53,6 +59,8 @@ public class Scheduler {
 
         booksSoonToReturn();
         returnBooks();
+
+        expiredToken();
     }
 
     private void sendExpirationNotification(int numOfDays) {
@@ -121,6 +129,16 @@ public class Scheduler {
             Notification notification = new Notification(message,
                     "Return book", rental.getCustomer().getUser(), null);
             notificationRepository.save(notification);
+        }
+    }
+
+    private void expiredToken() {
+        List<Token> validTokens = tokenRepository.findByIsTokenValidTrue();
+        for (Token token : validTokens) {
+            if(token.getCreatedAt().plusDays(1).isAfter(LocalDateTime.now())){
+                token.setTokenValid(false);
+                tokenRepository.save(token);
+            }
         }
     }
 }
