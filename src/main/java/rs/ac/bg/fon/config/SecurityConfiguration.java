@@ -33,7 +33,8 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/login/**").permitAll()
-                .requestMatchers("user/membership").permitAll()
+                .requestMatchers("/user").permitAll()
+                .requestMatchers("/user/membership").permitAll()
                 .requestMatchers("/customer/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/book/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/book/**").hasAuthority("ADMIN")
