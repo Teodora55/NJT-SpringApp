@@ -23,36 +23,10 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable("id") Long id) {
-        CustomerDTO customer = customerService.getCustomer(id);
-        return customer != null ? new ResponseEntity<>(customer, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
     @GetMapping("/all")
     public ResponseEntity<List<CustomerDTO>> getCustomers() {
         List<CustomerDTO> customers = customerService.getAllCustomers();
         return !customers.isEmpty() ? new ResponseEntity<>(customers, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping
-    public ResponseEntity<CustomerDTO> saveCustomers(@RequestBody CustomerDTO customer) {
-        return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable("id") Long id, @RequestBody CustomerDTO customer) {
-        CustomerDTO updatedCustomer = customerService.updateCustomer(id, customer);
-        return updatedCustomer != null ? new ResponseEntity<>(updatedCustomer, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable("id") Long id) {
-        CustomerDTO customer = customerService.deleteCustomer(id);
-        return customer != null ? new ResponseEntity<>(customer, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

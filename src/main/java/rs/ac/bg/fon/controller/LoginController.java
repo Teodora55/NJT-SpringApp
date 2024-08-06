@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rs.ac.bg.fon.service.impl.AuthenticationService;
-import rs.ac.bg.fon.service.impl.JwtService;
+import rs.ac.bg.fon.service.JwtService;
 import rs.ac.bg.fon.util.AuthenticationRequest;
 import rs.ac.bg.fon.model.dto.UserDTO;
+import rs.ac.bg.fon.service.AuthenticationService;
 import rs.ac.bg.fon.util.RegisterRequest;
 
 @RestController

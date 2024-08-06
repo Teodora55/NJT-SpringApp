@@ -18,10 +18,11 @@ import rs.ac.bg.fon.repository.AuthorRepository;
 import rs.ac.bg.fon.repository.BookCopyRepository;
 import rs.ac.bg.fon.repository.BookRepository;
 import rs.ac.bg.fon.repository.BookshelfRepository;
+import rs.ac.bg.fon.service.LoadDataService;
 import rs.ac.bg.fon.util.ApiBookResponse;
 
 @Service
-public class LoadDataService {
+public class LoadDataServiceImpl implements LoadDataService{
 
     @Autowired
     private BookRepository bookRepository;
@@ -36,6 +37,7 @@ public class LoadDataService {
     private BookCopyRepository bookCopyRepository;
 
     @Transactional
+    @Override
     public Set<Book> fetchBooksFromApi() {
         RestTemplate restTemplate = new RestTemplate();
         String apiUrl = "https://gutendex.com/books/";
@@ -79,8 +81,13 @@ public class LoadDataService {
         Set<Author> convertedAuthors = new HashSet<>();
         for (ApiBookResponse.ApiBook.Author author : authors) {
             int splitNameIndex = author.getName().indexOf(",");
-            String firstname = author.getName().substring(splitNameIndex + 2);
-            String lastname = author.getName().substring(0, splitNameIndex);
+            String firstname, lastname = "";
+            if (splitNameIndex == -1) {
+                firstname = author.getName();
+            } else {
+                firstname = author.getName().substring(splitNameIndex + 2);
+                lastname = author.getName().substring(0, splitNameIndex);
+            }
             Author a = authorRepository.findByFirstnameAndLastname(firstname, lastname);
             if (a == null) {
                 a = Author.builder()
@@ -122,7 +129,9 @@ public class LoadDataService {
     private String createIsbn(Long bookId) {
         StringBuilder isbn = new StringBuilder();
         Random random = new Random();
-        if (bookId < 10) {
+        if (bookId == null) {
+            isbn.append("000");
+        } else if (bookId < 10) {
             isbn.append("00");
             isbn.append(bookId);
         } else if (bookId < 100) {

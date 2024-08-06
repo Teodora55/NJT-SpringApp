@@ -15,46 +15,52 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "user")
-@NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class User implements UserDetails{
-    
+public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true)
     String username;
-    
+
     @Column
     String password;
-    
+
     @Column
     LocalDate membershipExpiration;
-    
+
     @OneToOne
     @JoinColumn(name = "customer_id")
     @JsonManagedReference
     private Customer customer;
-    
+
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "recipient-notifications")
     private Set<Notification> notifications;
-    
+
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User() {
+        membershipExpiration = LocalDate.now().plusWeeks(1);
+        customer = new Customer();
+        notifications = new HashSet<>();
+        role = Role.USER;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

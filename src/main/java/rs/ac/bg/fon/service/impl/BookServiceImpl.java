@@ -99,7 +99,10 @@ public class BookServiceImpl implements BookService {
 
     private String readFile(MultipartFile coverFile) {
         String fileName = coverFile.getOriginalFilename();
-        Path filePath = Paths.get(uploadDir, fileName);
+        Path filePath = Paths.get(fileName);
+        if (uploadDir != null) {
+            filePath = Paths.get(uploadDir, fileName);
+        }
         try {
             Files.write(filePath, coverFile.getBytes());
             return fileName;

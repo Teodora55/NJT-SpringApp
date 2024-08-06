@@ -33,12 +33,14 @@ import rs.ac.bg.fon.repository.UserRepository;
 import rs.ac.bg.fon.util.AuthenticationRequest;
 import rs.ac.bg.fon.model.dto.UserDTO;
 import rs.ac.bg.fon.model.mapper.UserMapper;
+import rs.ac.bg.fon.service.AuthenticationService;
+import rs.ac.bg.fon.service.JwtService;
 import rs.ac.bg.fon.util.RegisterRequest;
 import rs.ac.bg.fon.util.Scheduler;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     private UserRepository userRepository;
@@ -64,6 +66,7 @@ public class AuthenticationService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Override
     public UserDTO register(RegisterRequest request, HttpServletResponse response) {
         if (userRepository.findByUsername(request.getUsername()).orElse(null) != null) {
             return null;
@@ -92,6 +95,7 @@ public class AuthenticationService {
         return prepareResponse(user, response);
     }
 
+    @Override
     public UserDTO authenticate(AuthenticationRequest request, HttpServletResponse response) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);

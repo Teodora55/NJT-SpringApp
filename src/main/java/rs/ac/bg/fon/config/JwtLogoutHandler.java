@@ -8,7 +8,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
 import rs.ac.bg.fon.model.Token;
 import rs.ac.bg.fon.repository.TokenRepository;
-import rs.ac.bg.fon.service.impl.JwtService;
+import rs.ac.bg.fon.service.JwtService;
 
 @Component
 public class JwtLogoutHandler implements LogoutHandler{

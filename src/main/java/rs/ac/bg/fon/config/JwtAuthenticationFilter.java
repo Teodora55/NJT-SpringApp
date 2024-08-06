@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
-import rs.ac.bg.fon.service.impl.JwtService;
+import rs.ac.bg.fon.service.JwtService;
 
 @Component
 @RequiredArgsConstructor

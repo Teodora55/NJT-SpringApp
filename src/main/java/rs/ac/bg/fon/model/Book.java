@@ -14,6 +14,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +23,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "book")
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -35,7 +35,7 @@ public class Book {
 
     @Column
     String name;
-    
+
     @Column
     String coverUrl;
 
@@ -59,4 +59,9 @@ public class Book {
     @JsonManagedReference
     private Set<BookCopy> bookCopies;
 
+    public Book() {
+        bookshelves = new HashSet<>();
+        authors = new HashSet<>();
+        bookCopies = new HashSet<>();
+    }
 }

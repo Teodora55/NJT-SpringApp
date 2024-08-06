@@ -2,7 +2,9 @@ package rs.ac.bg.fon.util;
 
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class ApiBookResponse {
@@ -28,6 +30,8 @@ public class ApiBookResponse {
         private int download_count;
 
         @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
         public static class Author {
 
             private String name;

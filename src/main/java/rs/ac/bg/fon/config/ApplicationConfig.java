@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import rs.ac.bg.fon.repository.UserRepository;
-import rs.ac.bg.fon.service.impl.LoadDataService;
+import rs.ac.bg.fon.service.LoadDataService;
 
 @Configuration
 @RequiredArgsConstructor

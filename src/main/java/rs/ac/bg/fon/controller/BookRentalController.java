@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +24,7 @@ import rs.ac.bg.fon.model.Customer;
 import rs.ac.bg.fon.model.User;
 import rs.ac.bg.fon.service.BookRentalService;
 import rs.ac.bg.fon.service.BookService;
-import rs.ac.bg.fon.service.impl.JwtService;
+import rs.ac.bg.fon.service.JwtService;
 import rs.ac.bg.fon.model.dto.BookRentalDTO;
 
 @RestController
