@@ -43,16 +43,6 @@ public class BookRentalController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<BookRentalDTO>> getAllRentals() {
-        List<BookRentalDTO> bookRentals = bookRentalService.findAll();
-        if (bookRentals.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(bookRentals, HttpStatus.OK);
-        }
-    }
-
     @GetMapping
     public ResponseEntity<List<BookRentalDTO>> getUsersRentals(@NotNull HttpServletRequest request) {
         String customerUsername = jwtService.extractUsername(jwtService.extractToken(request));

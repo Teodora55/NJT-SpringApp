@@ -26,12 +26,6 @@ public class BookRentalServiceImpl implements BookRentalService {
     private BookCopyRepository bookCopyRepository;
 
     @Override
-    public List<BookRentalDTO> findAll() {
-        return bookRentalRepository.findAll()
-                .stream().map(BookRentalMapper::toDto).collect(Collectors.toList());
-    }
-
-    @Override
     public BookRental findById(Long id) {
         return bookRentalRepository.findById(id).orElse(null);
     }

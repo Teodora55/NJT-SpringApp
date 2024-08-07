@@ -56,17 +56,6 @@ public class BookRentalServiceImplTest {
     }
 
     @Test
-    void testFindAll() {
-        List<BookRental> rentals = Arrays.asList(bookRental);
-        when(bookRentalRepository.findAll()).thenReturn(rentals);
-
-        List<BookRentalDTO> result = bookRentalService.findAll();
-
-        assertEquals(1, result.size());
-        verify(bookRentalRepository, times(1)).findAll();
-    }
-
-    @Test
     void testFindById() {
         when(bookRentalRepository.findById(1L)).thenReturn(Optional.of(bookRental));
 

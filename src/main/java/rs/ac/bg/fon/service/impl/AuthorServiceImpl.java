@@ -37,20 +37,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDTO deleteAuthor(Long id) {
-        Author author = authorRepository.findById(id).orElse(null);
-        if (author != null) {
-            authorRepository.deleteById(id);
-        }
-        return AuthorMapper.toDto(author);
-    }
-
-    @Override
-    public AuthorDTO getAuthor(Long id) {
-        return AuthorMapper.toDto(authorRepository.findById(id).orElse(null));
-    }
-
-    @Override
     public List<AuthorDTO> getAllAuthors() {
         return authorRepository.findAll().stream().map(AuthorMapper::toDto).collect(Collectors.toList());
     }

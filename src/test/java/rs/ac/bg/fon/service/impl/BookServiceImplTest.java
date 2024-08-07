@@ -106,19 +106,6 @@ public class BookServiceImplTest {
     }
 
     @Test
-    void testGetBookDTO() {
-        Long bookId = 1L;
-
-        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
-
-        BookDTO result = bookService.getBookDTO(bookId);
-
-        assertNotNull(result);
-        assertEquals(BookMapper.toDto(book), result);
-        verify(bookRepository, times(1)).findById(bookId);
-    }
-
-    @Test
     void testGetAllBooks() {
         List<Book> books = Arrays.asList(book);
         when(bookRepository.findAll()).thenReturn(books);

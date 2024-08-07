@@ -8,10 +8,6 @@ public interface AuthorService {
     AuthorDTO saveAuthor(AuthorDTO author);
     
     AuthorDTO updateAuthor(Long id,AuthorDTO author);
-    
-    AuthorDTO deleteAuthor(Long id);
-    
-    AuthorDTO getAuthor(Long id);
-    
+            
     List<AuthorDTO> getAllAuthors();
 }

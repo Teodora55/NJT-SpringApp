@@ -1,5 +1,6 @@
 package rs.ac.bg.fon.model.dto;
 
+import java.util.HashSet;
 import lombok.Data;
 import java.util.Set;
 
@@ -10,4 +11,10 @@ public class BookDTO {
     private String coverUrl;
     private Set<BookshelfDTO> bookshelves;
     private Set<AuthorDTO> authors;
+
+    public BookDTO() {
+        this.bookshelves = new HashSet<>();
+        this.authors = new HashSet<>();
+    }
+
 }

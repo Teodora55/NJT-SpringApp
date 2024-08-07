@@ -67,12 +67,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO getBookDTO(Long id) {
-        return BookMapper.toDto(bookRepository.findById(id).orElse(null));
-    }
-
-    @Override
     public List<BookDTO> getAllBooks() {
+        List<Book> b = bookRepository.findAll();
         return bookRepository.findAll()
                 .stream().map(BookMapper::toDto).collect(Collectors.toList());
     }

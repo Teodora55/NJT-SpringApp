@@ -16,8 +16,6 @@ public interface BookService {
 
     Book getBook(Long id);
 
-    BookDTO getBookDTO(Long id);
-
     List<BookDTO> getAllBooks();
 
     List<BookCopyDTO> getAllBookCopies(Long bookId);

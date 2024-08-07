@@ -8,8 +8,6 @@ import rs.ac.bg.fon.model.dto.BookRentalDTO;
 
 public interface BookRentalService {
 
-    List<BookRentalDTO> findAll();
-
     BookRental findById(Long id);
 
     BookRentalDTO returnBook(Long id);

@@ -37,13 +37,6 @@ public class BookController {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BookDTO> getBookById(@PathVariable("id") Long id) {
-        BookDTO book = bookService.getBookDTO(id);
-        return book != null ? new ResponseEntity<>(book, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
     @GetMapping("/all")
     public ResponseEntity<List<BookDTO>> getBooks() {
         List<BookDTO> books = bookService.getAllBooks();

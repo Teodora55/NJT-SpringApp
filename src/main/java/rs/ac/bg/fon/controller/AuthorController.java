@@ -18,13 +18,6 @@ public class AuthorController {
     @Autowired
     private AuthorService authorService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable("id") Long id) {
-        AuthorDTO author = authorService.getAuthor(id);
-        return author != null ? new ResponseEntity<AuthorDTO>(author, HttpStatus.OK)
-                : new ResponseEntity<AuthorDTO>(HttpStatus.NOT_FOUND);
-    }
-
     @GetMapping("/all")
     public ResponseEntity<List<AuthorDTO>> getAuthors() {
         List<AuthorDTO> authors = authorService.getAllAuthors();
