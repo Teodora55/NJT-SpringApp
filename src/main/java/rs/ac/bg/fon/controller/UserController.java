@@ -1,6 +1,7 @@
 package rs.ac.bg.fon.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity updateUserInfo(@NotNull HttpServletRequest request, @RequestBody UserDTO user) {
+    public ResponseEntity updateUserInfo(@NotNull HttpServletRequest request, @RequestBody @Valid UserDTO user) {
         String username = jwtService.extractUsername(jwtService.extractToken(request));
         UserDTO updatedUser = userService.updateUser(user, username);
         return updatedUser != null

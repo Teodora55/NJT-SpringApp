@@ -1,6 +1,7 @@
 package rs.ac.bg.fon.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class LoginController {
     private JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterRequest request, HttpServletResponse response) {
+    public ResponseEntity register(@RequestBody @Valid RegisterRequest request, HttpServletResponse response) {
         UserDTO authResponse= authenticationService.register(request, response);
         if (authResponse == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -34,7 +35,7 @@ public class LoginController {
     }
 
     @PostMapping("/")
-    public ResponseEntity authenticate(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
+    public ResponseEntity authenticate(@RequestBody @Valid AuthenticationRequest request, HttpServletResponse response) {
         UserDTO authResponse = authenticationService.authenticate(request, response);
         if (authResponse == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);

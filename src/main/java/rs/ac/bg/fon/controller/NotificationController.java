@@ -1,5 +1,6 @@
 package rs.ac.bg.fon.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,13 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @PostMapping
-    public ResponseEntity notifyUser(@RequestBody NotificationDTO request) {
+    public ResponseEntity notifyUser(@RequestBody @Valid NotificationDTO request) {
         return notificationService.sendNotification(request) != null
                 ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PostMapping("/all")
-    public ResponseEntity notifyAllUsers(@RequestBody NotificationDTO request) {
+    public ResponseEntity notifyAllUsers(@RequestBody @Valid NotificationDTO request) {
         return notificationService.sendNotificationToAll(request) != null
                 ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
     }

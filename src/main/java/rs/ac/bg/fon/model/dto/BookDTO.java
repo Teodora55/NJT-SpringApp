@@ -1,5 +1,7 @@
 package rs.ac.bg.fon.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import java.util.HashSet;
 import lombok.Data;
 import java.util.Set;
@@ -7,6 +9,9 @@ import java.util.Set;
 @Data
 public class BookDTO {
     private Long id;
+    @NotBlank(message = "Book name is required")
+    @Pattern(regexp = "^[a-zA-Z0-9 .,'!?:;\"-]{2,50}$",
+            message = "Book name must be 2-50 characters long and can contain letters, numbers, spaces, and common punctuation marks")
     private String name;
     private String coverUrl;
     private Set<BookshelfDTO> bookshelves;

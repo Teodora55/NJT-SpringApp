@@ -1,5 +1,6 @@
 package rs.ac.bg.fon.controller;
 
+import jakarta.validation.Valid;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,14 +45,14 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookDTO> saveBooks(@RequestBody BookDTO book) {
+    public ResponseEntity<BookDTO> saveBooks(@RequestBody @Valid BookDTO book) {
         BookDTO createdBook = bookService.saveBook(book);
         return createdBook != null ? new ResponseEntity<>(createdBook, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDTO> updateBook(@PathVariable("id") Long id, @RequestBody BookDTO book) {
+    public ResponseEntity<BookDTO> updateBook(@PathVariable("id") Long id, @RequestBody @Valid BookDTO book) {
         BookDTO updatedBook = bookService.updateBook(id, book);
         return updatedBook != null ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -14,7 +14,7 @@ public class UserMapper {
 
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
-        userDTO.setRole(user.getRole().name());
+        userDTO.setRole(user.getRole());
         userDTO.setCustomer(CustomerMapper.toDto(user.getCustomer()));
         userDTO.setNotifications(user.getNotifications()
                 .stream().map(NotificationMapper::toDto).collect(Collectors.toSet()));
@@ -30,20 +30,12 @@ public class UserMapper {
 
         User user = new User();
         user.setUsername(userDTO.getUsername());
-        user.setRole(toUserRole(userDTO.getRole()));
+        user.setRole(userDTO.getRole());
         user.setCustomer(CustomerMapper.toEntity(userDTO.getCustomer()));
         user.setNotifications(userDTO.getNotifications()
                 .stream().map(NotificationMapper::toEntity).collect(Collectors.toSet()));
         user.setMembershipExpiration(userDTO.getMembershipExpiration());
 
         return user;
-    }
-
-    private static Role toUserRole(String role) {
-        try {
-            return Role.valueOf(role);
-        } catch (IllegalArgumentException e) {
-            return Role.USER;
-        }
     }
 }
