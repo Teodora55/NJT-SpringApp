@@ -12,7 +12,7 @@ public class UserDTO {
 
     @NotBlank(message = "Username is required")
     @Pattern(regexp = "^[a-zA-Z0-9]{6,20}$",
-            message = "Username can only contain alphanumeric characters and must be 6-20 characters long")
+            message = "Username is incorrectly formated")
     private String username;
     private Role role;
     private CustomerDTO customer;

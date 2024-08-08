@@ -20,7 +20,7 @@ public class AuthorController {
     @GetMapping("/all")
     public ResponseEntity<List<AuthorDTO>> getAuthors() {
         List<AuthorDTO> authors = authorService.getAllAuthors();
-        return authors.isEmpty() ? new ResponseEntity<List<AuthorDTO>>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<List<AuthorDTO>>(authors, HttpStatus.OK);
+        return authors.isEmpty() ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(authors, HttpStatus.OK);
     }
 }

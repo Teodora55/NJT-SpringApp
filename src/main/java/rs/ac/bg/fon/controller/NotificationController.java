@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,15 +22,23 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @PostMapping
-    public ResponseEntity notifyUser(@RequestBody @Valid NotificationDTO request) {
+    public ResponseEntity notifyUser(@RequestBody @Valid NotificationDTO request, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+        }
         return notificationService.sendNotification(request) != null
-                ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+                ? new ResponseEntity("User successfully notified!", HttpStatus.OK)
+                : new ResponseEntity("There were error while notifying user!", HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PostMapping("/all")
-    public ResponseEntity notifyAllUsers(@RequestBody @Valid NotificationDTO request) {
+    public ResponseEntity notifyAllUsers(@RequestBody @Valid NotificationDTO request, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+        }
         return notificationService.sendNotificationToAll(request) != null
-                ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+                ? new ResponseEntity("Users successfully notified!", HttpStatus.OK)
+                : new ResponseEntity("There were error while notifying users!", HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PutMapping("/received/{id}")

@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,19 +27,27 @@ public class LoginController {
     private JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterRequest request, HttpServletResponse response) {
-        UserDTO authResponse= authenticationService.register(request, response);
+    public ResponseEntity register(@RequestBody @Valid RegisterRequest request, BindingResult result,
+            HttpServletResponse response) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+        }
+        UserDTO authResponse = authenticationService.register(request, response);
         if (authResponse == null) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Username or password is not valid! ", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(authResponse, HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity authenticate(@RequestBody @Valid AuthenticationRequest request, HttpServletResponse response) {
+    public ResponseEntity authenticate(@RequestBody @Valid AuthenticationRequest request, BindingResult result,
+            HttpServletResponse response) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+        }
         UserDTO authResponse = authenticationService.authenticate(request, response);
         if (authResponse == null) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Username or password is not valid! ", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(authResponse, HttpStatus.OK);
     }

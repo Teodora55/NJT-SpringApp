@@ -68,41 +68,41 @@ public class BookRentalController {
     }
 
     @PostMapping(value = "/borrow")
-    public ResponseEntity<BookRentalDTO> borrowBook(@NotNull HttpServletRequest request, @RequestBody Long bookId) {
+    public ResponseEntity<String> borrowBook(@NotNull HttpServletRequest request, @RequestBody Long bookId) {
         String customerUsername = jwtService.extractUsername(jwtService.extractToken(request));
         User user = (User) userDetailsService.loadUserByUsername(customerUsername);
         Book book = bookService.getBook(bookId);
         if (user != null && user.getCustomer() != null
                 && book != null) {
             if (bookRentalService.findExistingRentalByBookId(user.getCustomer().getId(), bookId) != null) {
-                return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
+                return new ResponseEntity<>("'" + book.getName() + "' is already rented!", HttpStatus.ALREADY_REPORTED);
             }
             Customer customer = user.getCustomer();
             BookRentalDTO rental = bookRentalService.createRental(customer, book);
             if (rental == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>("There were problem renting '" + book.getName() + "'", HttpStatus.NOT_ACCEPTABLE);
             }
-            return new ResponseEntity<>(rental, HttpStatus.CREATED);
+            return new ResponseEntity<>("'" + book.getName() + "' is successfully rented!", HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("There were problem renting the book", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping(value = "/return")
-    public ResponseEntity<BookRentalDTO> returnBook(@RequestBody Long id) {
+    public ResponseEntity<String> returnBook(@RequestBody Long id) {
         BookRentalDTO rental = bookRentalService.returnBook(id);
         if (rental == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Your rental is not existing!", HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<>(rental, HttpStatus.CREATED);
+        return new ResponseEntity<>("Book is successfully returned!", HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/extend")
-    public ResponseEntity<BookRentalDTO> extendReturnBy(@RequestBody Long id) {
+    public ResponseEntity<String> extendReturnBy(@RequestBody Long id) {
         BookRentalDTO rental = bookRentalService.extendReturnByDate(id);
         if (rental == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Your rental is not existing!", HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<>(rental, HttpStatus.CREATED);
+        return new ResponseEntity<>("Book return date is extended successfully!", HttpStatus.CREATED);
     }
 
     @GetMapping("/read/{isbn}")

@@ -12,12 +12,12 @@ public class CustomerDTO {
     
     @NotBlank(message = "Firstname is required")
     @Pattern(regexp = "^[a-zA-Z][a-zA-Z '-]{0,28}[a-zA-Z]$",
-            message = "Firstname can only contain alphabetic characters, spaces, hyphens, and must be 2-30 characters long")
+            message = "Firstname is incorrectly formated")
     private String firstname;
     
     @NotBlank(message = "Lastname is required")
     @Pattern(regexp = "^[a-zA-Z][a-zA-Z '-]{0,28}[a-zA-Z]$",
-            message = "Lastname can only contain alphabetic characters, spaces, hyphens, and must be 2-30 characters long")
+            message = "Lastname is incorrectly formated")
     private String lastname;
     
     @NotBlank(message = "Email is required")

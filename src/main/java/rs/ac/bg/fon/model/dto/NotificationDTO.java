@@ -18,7 +18,7 @@ public class NotificationDTO {
     private String message;
     @NotBlank(message = "Title is required")
     @Pattern(regexp = "^[a-zA-Z][a-zA-Z '-]{5,50}[a-zA-Z]$",
-            message = "Title can only contain alphabetic characters, spaces, hyphens, and must be 5-50 characters long")
+            message = "Title is incorrectly formated")
     private String title;
     private Long recipientId;
     private String senderUsername;

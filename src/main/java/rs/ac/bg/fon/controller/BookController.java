@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,21 +46,27 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookDTO> saveBooks(@RequestBody @Valid BookDTO book) {
+    public ResponseEntity<Object> saveBooks(@RequestBody @Valid BookDTO book, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+        }
         BookDTO createdBook = bookService.saveBook(book);
-        return createdBook != null ? new ResponseEntity<>(createdBook, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return createdBook != null ? new ResponseEntity<>("Book is created successfully!", HttpStatus.OK)
+                : new ResponseEntity<>("There were problem saving the book!", HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDTO> updateBook(@PathVariable("id") Long id, @RequestBody @Valid BookDTO book) {
+    public ResponseEntity<String> updateBook(@PathVariable("id") Long id, @RequestBody @Valid BookDTO book, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+        }
         BookDTO updatedBook = bookService.updateBook(id, book);
-        return updatedBook != null ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return updatedBook != null ? new ResponseEntity<>("Book is updated successfully!", HttpStatus.OK)
+                : new ResponseEntity<>("There were problem updating the book!", HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/cover/{id}")
-    public ResponseEntity<BookDTO> updateBook(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<BookDTO> updateBookCover(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
         BookDTO updatedBook = bookService.uploadBookCover(id, file);
         return updatedBook != null ? new ResponseEntity<>(updatedBook, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -68,7 +75,7 @@ public class BookController {
     @GetMapping("/cover/{path}")
     public ResponseEntity<Resource> loadBookCover(@PathVariable("path") String path) {
         try {
-            Path coverPath = Paths.get(uploadDir,path);
+            Path coverPath = Paths.get(uploadDir, path);
             Resource resource = new UrlResource(coverPath.toUri());
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.IMAGE_JPEG);
@@ -80,9 +87,9 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BookDTO> deleteBook(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteBook(@PathVariable("id") Long id) {
         BookDTO book = bookService.deleteBook(id);
-        return book != null ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return book != null ? new ResponseEntity<>("Book is deleted successfully!", HttpStatus.OK)
+                : new ResponseEntity<>("There were problem deleting the book!", HttpStatus.NOT_FOUND);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,18 +55,23 @@ public class UserController {
     public ResponseEntity extendUserMembership(@RequestBody String username) {
         try {
             userService.extendMembership(username);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity("Membership extended successfully!", HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Membership could not be extended!", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/update")
-    public ResponseEntity updateUserInfo(@NotNull HttpServletRequest request, @RequestBody @Valid UserDTO user) {
+    public ResponseEntity updateUserInfo(@NotNull HttpServletRequest request,
+            @RequestBody @Valid UserDTO user, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+        }
         String username = jwtService.extractUsername(jwtService.extractToken(request));
         UserDTO updatedUser = userService.updateUser(user, username);
         return updatedUser != null
-                ? new ResponseEntity(updatedUser, HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
+                ? new ResponseEntity("Your info is updated!", HttpStatus.OK)
+                : new ResponseEntity("Your info could not be updated!", HttpStatus.BAD_REQUEST);
     }
 
 }
