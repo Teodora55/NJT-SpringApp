@@ -21,4 +21,9 @@ public class BookshelfServiceImpl implements BookshelfService {
                 .stream().map(BookshelfMapper::toDto).collect(Collectors.toList());
     }
 
+    @Override
+    public BookshelfDTO saveBookshelves(BookshelfDTO bookshelf) {
+        return BookshelfMapper.toDto(bookshelfRepository.save(BookshelfMapper.toEntity(bookshelf)));
+    }
+
 }

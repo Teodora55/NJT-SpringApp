@@ -39,6 +39,8 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/book/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/book/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/book/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/author").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/bookshelf").hasAuthority("ADMIN")
                 .anyRequest().authenticated())
                 .logout(logout -> logout.deleteCookies("token")
                 .addLogoutHandler(jwtLogoutHandler).addLogoutHandler(clearSiteData)

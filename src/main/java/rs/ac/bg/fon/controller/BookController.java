@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,10 +48,12 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveBooks(@RequestBody @Valid BookDTO book, BindingResult result) {
+    public ResponseEntity<String> saveBooks(@RequestBody @Valid BookDTO book, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
-        }
+            String errorMessage = result.getAllErrors().stream()
+                                       .map(ObjectError::getDefaultMessage)
+                                       .collect(Collectors.joining("; "));
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);        }
         BookDTO createdBook = bookService.saveBook(book);
         return createdBook != null ? new ResponseEntity<>("Book is created successfully!", HttpStatus.OK)
                 : new ResponseEntity<>("There were problem saving the book!", HttpStatus.BAD_REQUEST);
@@ -58,7 +62,10 @@ public class BookController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateBook(@PathVariable("id") Long id, @RequestBody @Valid BookDTO book, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+            String errorMessage = result.getAllErrors().stream()
+                                       .map(ObjectError::getDefaultMessage)
+                                       .collect(Collectors.joining("; "));
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
         BookDTO updatedBook = bookService.updateBook(id, book);
         return updatedBook != null ? new ResponseEntity<>("Book is updated successfully!", HttpStatus.OK)

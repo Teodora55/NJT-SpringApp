@@ -9,8 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,20 +28,16 @@ public class BookRental {
 	@Column(name = "borrowed_at", nullable = false)
 	private LocalDate borrowedAt;
 
-	@NotNull(message = "Return by is mandatory to fill!")
-	@Future(message = "Return by must be in the future!")
 	@Column(name = "return_by", nullable = false)
 	private LocalDate returnBy;
 
 	@Column(name = "returned_at")
 	private LocalDate returnedAt;
 
-	@NotNull(message =  "Customer is mandatory to fill!")
 	@ManyToOne
 	@JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
 	private Customer customer;
 
-	@NotNull(message = "Book is mandatory to fill!")
 	@ManyToOne
 	@JoinColumn(name = "isbn", referencedColumnName = "isbn", nullable = false)
         @JsonManagedReference

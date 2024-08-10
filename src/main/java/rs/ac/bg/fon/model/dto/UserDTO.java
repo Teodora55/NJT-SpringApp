@@ -11,7 +11,7 @@ import rs.ac.bg.fon.model.Role;
 public class UserDTO {
 
     @NotBlank(message = "Username is required")
-    @Pattern(regexp = "^[a-zA-Z0-9]{6,20}$",
+    @Pattern(regexp = "^[a-zA-Z0-9]{5,20}$",
             message = "Username is incorrectly formated")
     private String username;
     private Role role;

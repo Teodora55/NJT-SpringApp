@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
@@ -26,7 +27,8 @@ public class Notification {
     @Column
     private String title;
 
-    @Column
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String message;
 
     @ManyToOne

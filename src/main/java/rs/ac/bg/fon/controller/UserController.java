@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,7 +67,10 @@ public class UserController {
     public ResponseEntity updateUserInfo(@NotNull HttpServletRequest request,
             @RequestBody @Valid UserDTO user, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+            String errorMessage = result.getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage)
+                    .collect(Collectors.joining("; "));
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
         String username = jwtService.extractUsername(jwtService.extractToken(request));
         UserDTO updatedUser = userService.updateUser(user, username);

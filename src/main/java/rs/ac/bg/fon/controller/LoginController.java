@@ -2,10 +2,12 @@ package rs.ac.bg.fon.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +32,14 @@ public class LoginController {
     public ResponseEntity register(@RequestBody @Valid RegisterRequest request, BindingResult result,
             HttpServletResponse response) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+            String errorMessage = result.getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage)
+                    .collect(Collectors.joining("; "));
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
         UserDTO authResponse = authenticationService.register(request, response);
         if (authResponse == null) {
-            return new ResponseEntity("Username or password is not valid! ", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Username is already used!", HttpStatus.CONFLICT);
         }
         return new ResponseEntity(authResponse, HttpStatus.OK);
     }
@@ -43,7 +48,10 @@ public class LoginController {
     public ResponseEntity authenticate(@RequestBody @Valid AuthenticationRequest request, BindingResult result,
             HttpServletResponse response) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+            String errorMessage = result.getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage)
+                    .collect(Collectors.joining("; "));
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
         UserDTO authResponse = authenticationService.authenticate(request, response);
         if (authResponse == null) {
