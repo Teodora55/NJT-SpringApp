@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.TestPropertySource;
 
 import rs.ac.bg.fon.model.Bookshelf;
 import rs.ac.bg.fon.model.dto.BookshelfDTO;
@@ -20,7 +19,6 @@ import rs.ac.bg.fon.repository.BookshelfRepository;
 import rs.ac.bg.fon.service.BookshelfService;
 
 @SpringBootTest
-@TestPropertySource("classpath:application-test.properties")
 public class BookshelfServiceImplTest {
 
     @Autowired
