@@ -13,11 +13,15 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import rs.ac.bg.fon.model.Author;
 import rs.ac.bg.fon.model.dto.AuthorDTO;
 import rs.ac.bg.fon.model.mapper.AuthorMapper;
 import rs.ac.bg.fon.repository.AuthorRepository;
 
+@SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 public class AuthorServiceImplTest {
 
     @Mock
@@ -43,35 +47,6 @@ public class AuthorServiceImplTest {
         assertNotNull(result);
         assertEquals("John", result.getFirstname());
         verify(authorRepository).save(any(Author.class));
-    }
-
-    @Test
-    void testUpdateAuthor_AuthorExists() {
-        Long authorId = 1L;
-        Author existingAuthor = new Author(authorId, "John", "Doe", 1970, null, null);
-        AuthorDTO updatedAuthorDTO = new AuthorDTO(null, "Jane", "Doe", 1980, null);
-        when(authorRepository.findById(authorId)).thenReturn(Optional.of(existingAuthor));
-        when(authorRepository.save(any(Author.class))).thenReturn(existingAuthor);
-
-        AuthorDTO result = authorService.updateAuthor(authorId, updatedAuthorDTO);
-
-        assertNotNull(result);
-        assertEquals("Jane", result.getFirstname());
-        verify(authorRepository).findById(authorId);
-        verify(authorRepository).save(any(Author.class));
-    }
-
-    @Test
-    void testUpdateAuthor_AuthorDoesNotExist() {
-        Long authorId = 1L;
-        AuthorDTO updatedAuthorDTO = new AuthorDTO(null, "Jane", "Doe", 1980, null);
-        when(authorRepository.findById(authorId)).thenReturn(Optional.empty());
-
-        AuthorDTO result = authorService.updateAuthor(authorId, updatedAuthorDTO);
-
-        assertNull(result);
-        verify(authorRepository).findById(authorId);
-        verify(authorRepository, never()).save(any(Author.class));
     }
 
     @Test

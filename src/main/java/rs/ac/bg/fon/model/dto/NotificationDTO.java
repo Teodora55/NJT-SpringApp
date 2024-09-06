@@ -20,7 +20,7 @@ public class NotificationDTO {
     private String message;
 
     @NotBlank(message = "Title is required")
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z '-]{5,50}[a-zA-Z]$",
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z '-]{4,50}$",
             message = "Title is incorrectly formated")
     private String title;
 

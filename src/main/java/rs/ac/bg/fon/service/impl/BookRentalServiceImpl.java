@@ -31,7 +31,7 @@ public class BookRentalServiceImpl implements BookRentalService {
     }
 
     @Override
-    public BookRentalDTO returnBook(Long id) {
+    public BookRental returnBook(Long id) {
         BookRental existing = findById(id);
         if (existing != null) {
             existing.setReturnedAt(LocalDate.now());
@@ -40,17 +40,17 @@ public class BookRentalServiceImpl implements BookRentalService {
             bookCopy.setStatus(BookCopyStatus.AVAILABLE);
             bookCopyRepository.save(bookCopy);
         }
-        return BookRentalMapper.toDto(existing);
+        return existing;
     }
 
     @Override
-    public BookRentalDTO extendReturnByDate(Long id) {
+    public BookRental extendReturnByDate(Long id) {
         BookRental existing = findById(id);
         if (existing != null) {
             existing.setReturnBy(existing.getReturnBy().plusWeeks(2));
             bookRentalRepository.save(existing);
         }
-        return BookRentalMapper.toDto(existing);
+        return existing;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class BookRentalServiceImpl implements BookRentalService {
     }
 
     @Override
-    public BookRentalDTO createRental(Customer customer, Book book) {
+    public BookRental createRental(Customer customer, Book book) {
         BookCopy bookCopy = book.getBookCopies().stream()
                 .filter(copy -> copy.getStatus() == BookCopyStatus.AVAILABLE)
                 .findFirst().orElse(null);
@@ -76,7 +76,7 @@ public class BookRentalServiceImpl implements BookRentalService {
         bookRentalRepository.save(rental);
         bookCopy.setStatus(BookCopyStatus.RENTED);
         bookCopyRepository.save(bookCopy);
-        return BookRentalMapper.toDto(rental);
+        return rental;
     }
     
     @Override

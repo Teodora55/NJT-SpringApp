@@ -78,8 +78,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 request.getJmbg(),
                 request.getEmail(),
                 new ArrayList<>(),
-                null,
-                new ArrayList<>());
+                null);
         customerRepository.save(customer);
         User user = new User(
                 null,

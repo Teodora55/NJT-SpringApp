@@ -43,10 +43,6 @@ public class BookRental {
         @JsonManagedReference
 	private BookCopy bookCopy;
 
-	@ManyToOne
-	@JoinColumn(name = "approved_by_admin_id", referencedColumnName = "id")
-	private Customer approvedByAdmin;
-
 	public BookRental() {
 		this.borrowedAt = DateHelper.getTodayDate();
 		this.returnBy = DateHelper.getTodayDate().plusWeeks(1);

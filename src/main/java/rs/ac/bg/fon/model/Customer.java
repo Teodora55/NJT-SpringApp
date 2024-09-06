@@ -48,8 +48,4 @@ public class Customer {
     @JsonBackReference
     private User user;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "approvedByAdmin")
-    private List<BookRental> bookRentalApprovals;
-
 }

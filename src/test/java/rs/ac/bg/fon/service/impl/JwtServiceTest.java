@@ -23,8 +23,12 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 public class JwtServiceTest {
 
     @InjectMocks

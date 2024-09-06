@@ -1,5 +1,6 @@
 package rs.ac.bg.fon.model.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public class UserDTO {
             message = "Username is incorrectly formated")
     private String username;
     private Role role;
+    @Valid
     private CustomerDTO customer;
     private Set<NotificationDTO> notifications;
     private LocalDate membershipExpiration;

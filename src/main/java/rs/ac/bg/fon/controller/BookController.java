@@ -48,23 +48,24 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<String> saveBooks(@RequestBody @Valid BookDTO book, BindingResult result) {
+    public ResponseEntity saveBooks(@RequestBody @Valid BookDTO book, BindingResult result) {
         if (result.hasErrors()) {
             String errorMessage = result.getAllErrors().stream()
-                                       .map(ObjectError::getDefaultMessage)
-                                       .collect(Collectors.joining("; "));
-            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);        }
+                    .map(ObjectError::getDefaultMessage)
+                    .collect(Collectors.joining("; "));
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
         BookDTO createdBook = bookService.saveBook(book);
         return createdBook != null ? new ResponseEntity<>("Book is created successfully!", HttpStatus.OK)
                 : new ResponseEntity<>("There were problem saving the book!", HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateBook(@PathVariable("id") Long id, @RequestBody @Valid BookDTO book, BindingResult result) {
+    public ResponseEntity updateBook(@PathVariable("id") Long id, @RequestBody @Valid BookDTO book, BindingResult result) {
         if (result.hasErrors()) {
             String errorMessage = result.getAllErrors().stream()
-                                       .map(ObjectError::getDefaultMessage)
-                                       .collect(Collectors.joining("; "));
+                    .map(ObjectError::getDefaultMessage)
+                    .collect(Collectors.joining("; "));
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
         BookDTO updatedBook = bookService.updateBook(id, book);
@@ -73,7 +74,7 @@ public class BookController {
     }
 
     @PutMapping("/cover/{id}")
-    public ResponseEntity<BookDTO> updateBookCover(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity updateBookCover(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
         BookDTO updatedBook = bookService.uploadBookCover(id, file);
         return updatedBook != null ? new ResponseEntity<>(updatedBook, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -94,7 +95,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable("id") Long id) {
+    public ResponseEntity deleteBook(@PathVariable("id") Long id) {
         BookDTO book = bookService.deleteBook(id);
         return book != null ? new ResponseEntity<>("Book is deleted successfully!", HttpStatus.OK)
                 : new ResponseEntity<>("There were problem deleting the book!", HttpStatus.NOT_FOUND);

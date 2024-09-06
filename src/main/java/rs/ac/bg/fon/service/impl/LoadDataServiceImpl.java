@@ -22,7 +22,7 @@ import rs.ac.bg.fon.service.LoadDataService;
 import rs.ac.bg.fon.util.ApiBookResponse;
 
 @Service
-public class LoadDataServiceImpl implements LoadDataService{
+public class LoadDataServiceImpl implements LoadDataService {
 
     @Autowired
     private BookRepository bookRepository;
@@ -70,9 +70,9 @@ public class LoadDataServiceImpl implements LoadDataService{
                     .coverUrl(apiBook.getFormats().get("image/jpeg"))
                     .build();
             bookRepository.saveAndFlush(book);
-        }
-        for (int i = 0; i < 3; i++) {
-            createBookCopies(book);
+            for (int i = 0; i < 3; i++) {
+                createBookCopies(book);
+            }
         }
         return book;
     }

@@ -14,15 +14,13 @@ public interface BookRentalRepository extends JpaRepository<BookRental, Long> {
     List<BookRental> findByCustomerIdAndReturnedAtIsNull(Long customerId);
 
     @Query(value = "SELECT rentals.* FROM rentals JOIN book_copy ON book_copy.isbn = rentals.isbn "
-            + "WHERE book_copy.book_id = :bookId AND rentals.customer_Id = :customerId AND rentals.returned_at IS NULL", nativeQuery = true)
+            + "WHERE book_copy.book_id = :bookId AND rentals.customer_Id = :customerId AND rentals.returned_at IS NULL",
+            nativeQuery = true)
     BookRental findByCustomerIdAndBookIdAndReturnedAtIsNull(Long customerId, Long bookId);
 
     void deleteByCustomerId(Long customerId);
 
     List<BookRental> findByCustomerId(Long customerId);
-
-    @Query(value = "SELECT * FROM rentals r WHERE MONTH(r.borrowed_at) = :month AND YEAR(r.borrowed_at) = :year", nativeQuery = true)
-    List<BookRental> findLastMonthRentals(@Param(value = "month") int month, @Param(value = "year") int year);
 
     @Query("SELECT br FROM BookRental br WHERE br.returnBy = :day AND br.returnedAt IS NULL")
     List<BookRental> findRentalsDue(@Param("day") LocalDate day);

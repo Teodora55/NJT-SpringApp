@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.bg.fon.model.Book;
+import rs.ac.bg.fon.model.BookRental;
 import rs.ac.bg.fon.model.Customer;
 import rs.ac.bg.fon.model.User;
 import rs.ac.bg.fon.service.BookRentalService;
@@ -59,37 +60,45 @@ public class BookRentalController {
     public ResponseEntity<List<BookRentalDTO>> getUsersCurrentRentals(@NotNull HttpServletRequest request) {
         String customerUsername = jwtService.extractUsername(jwtService.extractToken(request));
         User user = (User) userDetailsService.loadUserByUsername(customerUsername);
-        List<BookRentalDTO> bookRentals = bookRentalService.findCustomersCurrentRentals(user.getCustomer().getId());
-        if (bookRentals.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(bookRentals, HttpStatus.OK);
+        try {
+            List<BookRentalDTO> bookRentals = bookRentalService.findCustomersCurrentRentals(user.getCustomer().getId());
+            if (bookRentals.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(bookRentals, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping(value = "/borrow")
     public ResponseEntity<String> borrowBook(@NotNull HttpServletRequest request, @RequestBody Long bookId) {
         String customerUsername = jwtService.extractUsername(jwtService.extractToken(request));
-        User user = (User) userDetailsService.loadUserByUsername(customerUsername);
-        Book book = bookService.getBook(bookId);
-        if (user != null && user.getCustomer() != null
-                && book != null) {
-            if (bookRentalService.findExistingRentalByBookId(user.getCustomer().getId(), bookId) != null) {
-                return new ResponseEntity<>("'" + book.getName() + "' is already rented!", HttpStatus.ALREADY_REPORTED);
+        try {
+            User user = (User) userDetailsService.loadUserByUsername(customerUsername);
+            Book book = bookService.getBook(bookId);
+            if (user != null && user.getCustomer() != null
+                    && book != null) {
+                if (bookRentalService.findExistingRentalByBookId(user.getCustomer().getId(), bookId) != null) {
+                    return new ResponseEntity<>("'" + book.getName() + "' is already rented!", HttpStatus.ALREADY_REPORTED);
+                }
+                Customer customer = user.getCustomer();
+                BookRental rental = bookRentalService.createRental(customer, book);
+                if (rental == null) {
+                    return new ResponseEntity<>("There were problem renting '" + book.getName() + "'", HttpStatus.NOT_ACCEPTABLE);
+                }
+                return new ResponseEntity<>("'" + book.getName() + "' is successfully rented!", HttpStatus.CREATED);
             }
-            Customer customer = user.getCustomer();
-            BookRentalDTO rental = bookRentalService.createRental(customer, book);
-            if (rental == null) {
-                return new ResponseEntity<>("There were problem renting '" + book.getName() + "'", HttpStatus.NOT_ACCEPTABLE);
-            }
-            return new ResponseEntity<>("'" + book.getName() + "' is successfully rented!", HttpStatus.CREATED);
+            return new ResponseEntity<>("There were problem renting the book", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("There were problem renting the book", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("There were problem renting the book", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping(value = "/return")
     public ResponseEntity<String> returnBook(@RequestBody Long id) {
-        BookRentalDTO rental = bookRentalService.returnBook(id);
+        BookRental rental = bookRentalService.returnBook(id);
         if (rental == null) {
             return new ResponseEntity<>("Your rental is not existing!", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -98,7 +107,7 @@ public class BookRentalController {
 
     @PostMapping(value = "/extend")
     public ResponseEntity<String> extendReturnBy(@RequestBody Long id) {
-        BookRentalDTO rental = bookRentalService.extendReturnByDate(id);
+        BookRental rental = bookRentalService.extendReturnByDate(id);
         if (rental == null) {
             return new ResponseEntity<>("Your rental is not existing!", HttpStatus.NOT_ACCEPTABLE);
         }

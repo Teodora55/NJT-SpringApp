@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import rs.ac.bg.fon.model.Customer;
 import rs.ac.bg.fon.model.User;
@@ -23,6 +25,8 @@ import rs.ac.bg.fon.model.mapper.CustomerMapper;
 import rs.ac.bg.fon.repository.CustomerRepository;
 import rs.ac.bg.fon.repository.UserRepository;
 
+@SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 public class UserServiceImplTest {
 
     @Mock

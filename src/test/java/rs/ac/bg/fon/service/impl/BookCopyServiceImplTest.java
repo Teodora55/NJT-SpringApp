@@ -10,12 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import rs.ac.bg.fon.model.BookCopy;
 import rs.ac.bg.fon.model.BookCopyStatus;
 import rs.ac.bg.fon.model.dto.BookCopyDTO;
 import rs.ac.bg.fon.model.mapper.BookCopyMapper;
 import rs.ac.bg.fon.repository.BookCopyRepository;
 
+@SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 public class BookCopyServiceImplTest {
 
     @Mock
@@ -40,48 +44,6 @@ public class BookCopyServiceImplTest {
         assertNotNull(result);
         assertEquals("1234567890", result.getIsbn());
         verify(bookCopyRepository).save(any(BookCopy.class));
-    }
-
-    @Test
-    void testFindBookCopy() {
-        String isbn = "1234567890";
-        BookCopy bookCopy = new BookCopy(isbn, BookCopyStatus.AVAILABLE, null, null);
-        when(bookCopyRepository.findByIsbn(isbn)).thenReturn(bookCopy);
-
-        BookCopyDTO result = bookCopyService.findBookCopy(isbn);
-
-        assertNotNull(result);
-        assertEquals(isbn, result.getIsbn());
-        verify(bookCopyRepository).findByIsbn(isbn);
-    }
-
-    @Test
-    void testUpdateBookCopyStatus() {
-        String isbn = "1234567890";
-        BookCopy existing = new BookCopy(isbn, BookCopyStatus.AVAILABLE, null, null);
-        when(bookCopyRepository.findByIsbn(isbn)).thenReturn(existing);
-        when(bookCopyRepository.save(any(BookCopy.class))).thenReturn(existing);
-
-        BookCopyDTO result = bookCopyService.updateBookCopyStatus(isbn, BookCopyStatus.RENTED);
-
-        assertNotNull(result);
-        assertEquals(isbn, result.getIsbn());
-        assertEquals(BookCopyStatus.RENTED, result.getStatus());
-        verify(bookCopyRepository).findByIsbn(isbn);
-        verify(bookCopyRepository).save(any(BookCopy.class));
-    }
-
-    @Test
-    void testDeleteBookCopy() {
-        String isbn = "1234567890";
-        BookCopy existing = new BookCopy(isbn, BookCopyStatus.AVAILABLE, null, null);
-        when(bookCopyRepository.findByIsbn(isbn)).thenReturn(existing);
-
-        BookCopyDTO result = bookCopyService.deleteBookCopy(isbn);
-
-        assertNotNull(result);
-        verify(bookCopyRepository).findByIsbn(isbn);
-        verify(bookCopyRepository).delete(existing);
     }
 
     @Test

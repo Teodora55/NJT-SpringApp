@@ -22,21 +22,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDTO updateAuthor(Long id, AuthorDTO updatedAuthor) {
-        Author existingAuthor = authorRepository.findById(id).orElse(null);
-
-        if (existingAuthor != null) {
-            existingAuthor.setFirstname(updatedAuthor.getFirstname());
-            existingAuthor.setLastname(updatedAuthor.getLastname());
-            existingAuthor.setYearOfBirth(updatedAuthor.getYearOfBirth());
-            existingAuthor.setYearOfDeath(updatedAuthor.getYearOfDeath());
-
-            return AuthorMapper.toDto(authorRepository.save(existingAuthor));
-        }
-        return null;
-    }
-
-    @Override
     public List<AuthorDTO> getAllAuthors() {
         return authorRepository.findAll().stream().map(AuthorMapper::toDto).collect(Collectors.toList());
     }

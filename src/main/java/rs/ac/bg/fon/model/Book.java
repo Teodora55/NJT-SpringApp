@@ -38,7 +38,7 @@ public class Book {
     @Column
     String coverUrl;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(
             name = "bookshelf_book",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -46,7 +46,7 @@ public class Book {
     @JsonManagedReference
     Set<Bookshelf> bookshelves;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(
             name = "author_book",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -54,7 +54,7 @@ public class Book {
     @JsonManagedReference
     Set<Author> authors;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JsonManagedReference
     private Set<BookCopy> bookCopies;
 

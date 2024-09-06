@@ -21,12 +21,14 @@ import rs.ac.bg.fon.util.AuthenticationRequest;
 import rs.ac.bg.fon.util.RegisterRequest;
 
 import java.util.Optional;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.context.TestPropertySource;
 import rs.ac.bg.fon.service.JwtService;
 
+@SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 public class AuthenticationServiceImplTest {
 
     @Mock

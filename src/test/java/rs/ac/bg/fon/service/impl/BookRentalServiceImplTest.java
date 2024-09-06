@@ -16,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import rs.ac.bg.fon.model.Book;
 import rs.ac.bg.fon.model.BookCopy;
@@ -27,6 +29,8 @@ import rs.ac.bg.fon.repository.BookCopyRepository;
 import rs.ac.bg.fon.repository.BookRentalRepository;
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 public class BookRentalServiceImplTest {
 
     @Mock
@@ -70,7 +74,7 @@ public class BookRentalServiceImplTest {
     void testReturnBook() {
         when(bookRentalRepository.findById(1L)).thenReturn(Optional.of(bookRental));
 
-        BookRentalDTO result = bookRentalService.returnBook(1L);
+        BookRental result = bookRentalService.returnBook(1L);
 
         assertNotNull(result);
         assertEquals(BookCopyStatus.AVAILABLE, bookCopy.getStatus());
@@ -84,7 +88,7 @@ public class BookRentalServiceImplTest {
         LocalDate returnBy = bookRental.getReturnBy();
         when(bookRentalRepository.findById(1L)).thenReturn(Optional.of(bookRental));
 
-        BookRentalDTO result = bookRentalService.extendReturnByDate(1L);
+        BookRental result = bookRentalService.extendReturnByDate(1L);
 
         assertNotNull(result);
         assertEquals(returnBy.plusWeeks(2), result.getReturnBy());
@@ -96,7 +100,7 @@ public class BookRentalServiceImplTest {
         when(bookRentalRepository.save(any(BookRental.class))).thenReturn(bookRental);
         when(bookCopyRepository.save(bookCopy)).thenReturn(bookCopy);
 
-        BookRentalDTO result = bookRentalService.createRental(customer, book);
+        BookRental result = bookRentalService.createRental(customer, book);
 
         assertNotNull(result);
         assertEquals(BookCopyStatus.RENTED, bookCopy.getStatus());

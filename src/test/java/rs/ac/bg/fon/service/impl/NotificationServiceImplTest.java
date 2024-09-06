@@ -16,12 +16,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import rs.ac.bg.fon.model.Notification;
 import rs.ac.bg.fon.model.User;
 import rs.ac.bg.fon.model.dto.NotificationDTO;
 import rs.ac.bg.fon.repository.NotificationRepository;
 import rs.ac.bg.fon.repository.UserRepository;
 
+@SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 public class NotificationServiceImplTest {
 
     @Mock
@@ -49,7 +53,7 @@ public class NotificationServiceImplTest {
         when(userRepository.findByCustomerId(anyLong())).thenReturn(Optional.of(recipient));
         when(notificationRepository.save(any(Notification.class))).thenReturn(notification);
 
-        NotificationDTO response = notificationService.sendNotification(request);
+        Notification response = notificationService.sendNotification(request);
 
         assertNotNull(response);
         verify(userRepository, times(1)).findByUsername(anyString());
@@ -70,7 +74,7 @@ public class NotificationServiceImplTest {
         when(userRepository.findAll()).thenReturn(users);
         when(notificationRepository.save(any(Notification.class))).thenReturn(notification);
 
-        NotificationDTO response = notificationService.sendNotificationToAll(request);
+        Notification response = notificationService.sendNotificationToAll(request);
 
         assertNotNull(response);
         verify(userRepository, times(1)).findByUsername(anyString());

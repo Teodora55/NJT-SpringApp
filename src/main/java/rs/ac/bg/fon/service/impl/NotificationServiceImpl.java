@@ -21,15 +21,15 @@ public class NotificationServiceImpl implements NotificationService {
     private UserRepository userRepository;
 
     @Override
-    public NotificationDTO sendNotification(NotificationDTO request) {
+    public Notification sendNotification(NotificationDTO request) {
         User sender = userRepository.findByUsername(request.getSenderUsername()).orElse(null);
         User recipient = userRepository.findByCustomerId(request.getRecipientId()).orElse(null);
         Notification notification = new Notification(request.getMessage(), request.getTitle(), recipient, sender);
-        return NotificationMapper.toDto(notificationRepository.save(notification));
+        return notificationRepository.save(notification);
     }
 
     @Override
-    public NotificationDTO sendNotificationToAll(NotificationDTO request) {
+    public Notification sendNotificationToAll(NotificationDTO request) {
         User sender = userRepository.findByUsername(request.getSenderUsername()).orElse(null);
         Notification notification = new Notification(request.getMessage(), request.getTitle(), null, sender);
         List<User> users = userRepository.findAll();
@@ -41,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
                 successfullySaved = false;
             }
         }
-        return successfullySaved ? NotificationMapper.toDto(notification) : null;
+        return successfullySaved ? notification : null;
     }
 
     @Override

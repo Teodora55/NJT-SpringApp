@@ -10,13 +10,13 @@ public interface BookRentalService {
 
     BookRental findById(Long id);
 
-    BookRentalDTO returnBook(Long id);
+    BookRental returnBook(Long id);
     
-    BookRentalDTO extendReturnByDate(Long id);
+    BookRental extendReturnByDate(Long id);
     
     BookRental findExistingRentalByBookId(Long customerId,Long bookId);
     
-    BookRentalDTO createRental(Customer customer, Book book);
+    BookRental createRental(Customer customer, Book book);
 
     List<BookRentalDTO> findByCustomer(Long customerId);
 

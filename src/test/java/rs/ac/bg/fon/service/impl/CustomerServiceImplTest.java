@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestPropertySource;
 
 import rs.ac.bg.fon.model.Customer;
 import rs.ac.bg.fon.model.dto.CustomerDTO;
@@ -20,6 +21,7 @@ import rs.ac.bg.fon.repository.CustomerRepository;
 import rs.ac.bg.fon.service.CustomerService;
 
 @SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 public class CustomerServiceImplTest {
 
     @Autowired
@@ -30,8 +32,8 @@ public class CustomerServiceImplTest {
 
     @Test
     void testGetAllCustomers() {
-        Customer customer1 = new Customer(1L, "John", "Doe", "123456789", "john.doe@example.com", new ArrayList<>(), null, new ArrayList<>());
-        Customer customer2 = new Customer(2L, "Jane", "Doe", "987654321", "jane.doe@example.com", new ArrayList<>(), null, new ArrayList<>());
+        Customer customer1 = new Customer(1L, "John", "Doe", "123456789", "john.doe@example.com", new ArrayList<>(), null);
+        Customer customer2 = new Customer(2L, "Jane", "Doe", "987654321", "jane.doe@example.com", new ArrayList<>(), null);
 
         List<Customer> customers = Arrays.asList(customer1, customer2);
         when(customerRepository.findAll()).thenReturn(customers);

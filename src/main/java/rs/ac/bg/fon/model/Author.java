@@ -1,6 +1,7 @@
 package rs.ac.bg.fon.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.CascadeType;
 import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +39,7 @@ public class Author {
     @Column
     private Integer yearOfDeath;
     
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany(mappedBy = "authors", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JsonBackReference
     private Set<Book> books;
 
